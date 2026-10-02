@@ -1,0 +1,29 @@
+/* ===== redes sociales (esquina derecha) ===== */
+.hd-r{display:flex;align-items:center;gap:12px}
+.soc{display:flex;gap:8px}
+.soc a{--c:#fff;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;color:#fff;cursor:pointer;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);animation:srIn .5s var(--ease) backwards;animation-delay:calc(var(--i)*80ms + .3s);transition:transform .35s var(--ease),background .25s,box-shadow .25s,border-color .25s}
+.soc svg{width:18px;height:18px;fill:currentColor;transition:transform .35s var(--ease)}
+.soc a:hover,.soc a:focus-visible{transform:translateY(-3px) scale(1.1);background:var(--c);border-color:transparent;box-shadow:0 8px 18px rgba(0,0,0,.4)}
+.soc a:hover svg{transform:rotate(-8deg) scale(1.1)}
+.soc .tt{--c:#000}.soc .tt:hover{box-shadow:-3px -2px 0 #25f4ee,3px 2px 0 #fe2c55}
+.soc .wa{--c:#25D366}.soc .fb{--c:#1877F2}
+.soc .ig{--c:linear-gradient(45deg,#feda75,#fa7e1e 30%,#d62976 60%,#962fbf 80%,#4f5bd5)}
+.soc .tg{--c:#26A5E4}.soc .xt{--c:#000}.soc .xt:hover{border-color:rgba(255,255,255,.5)}
+.soc a:hover{background:var(--c)}
+.soc a{flex:none}
+@media (max-width:768px){.soc{gap:5px}.soc a{width:30px;height:30px}.soc svg{width:15px;height:15px}}
+@media (max-width:520px){.soc{gap:4px}.soc a{width:27px;height:27px}.soc svg{width:14px;height:14px}}
+@media (max-width:520px){.hd-r .badge{display:none}}
+
+/* ===== header con buscador + mapa ===== */
+header{position:relative;z-index:40;gap:14px}
+header .searchrow{flex:1;min-width:0;width:auto;max-width:560px;margin:0 auto}
+header .search{height:46px;background:rgba(255,255,255,.08);box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none}
+header .mapbtn{height:46px}
+@media (min-width:769px){header .mapbtn{padding:0 18px 0 14px}}
+@media (max-width:768px){
+  header{flex-wrap:wrap;border-radius:26px;row-gap:10px;padding:8px 10px 10px 8px}
+  header .searchrow{order:3;flex:1 1 100%;max-width:none;margin:0}
+  header .search,header .mapbtn{height:48px}
+}
+.sx-k{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-style:normal;font-weight:700}

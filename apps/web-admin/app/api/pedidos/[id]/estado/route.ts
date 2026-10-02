@@ -1,0 +1,184 @@
+import { NextRequest } from 'next/server'
+import { z } from 'zod'
+import { sql } from '@/lib/db'
+import { getSessionUser } from '@/lib/auth'
+import { recalcularPedido } from '@/lib/pedidos-utils'
+import {
+  notificarPedidoAceptado,
+  notificarPedidoRechazado,
+  notificarPedidoListo,
+  notificarPedidoEnCamino,
+  notificarPedidoEntregado,
+  notificarPedidoCancelado,
+} from '@/lib/firebase/notificaciones-pedido'
+const estadoSchema = z.object({
+  estado: z.enum([
+    'PENDIENTE',
+    'ACEPTADO',
+    'PREPARANDO',
+    'LISTO',
+    'ASIGNADO',
+    'EN_CAMINO',
+    'ENTREGADO',
+    'RECHAZADO',
+    'CANCELADO',
+  ]),
+  notas: z.string().max(500).optional().nullable(),
+})
+
+export async function PATCH(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const user = await getSessionUser()
+  if (!user || user.role !== 'ADMIN') {
+    return Response.json({ ok: false, error: 'No autorizado' }, { status: 401 })
+  }
+
+  const { id } = await params
+
+  try {
+    const body = await req.json()
+    const parsed = estadoSchema.safeParse(body)
+
+    if (!parsed.success) {
+      return Response.json(
+        { ok: false, error: 'Datos inválidos', issues: parsed.error.issues },
+        { status: 400 }
+      )
+    }
+
+    const { estado, notas } = parsed.data
+
+    // Verificar que existe + obtener pedido_id
+    const exists = await sql`
+      SELECT id, pedido_id FROM sub_pedidos WHERE id = ${id} LIMIT 1
+    `
+    if (exists.length === 0) {
+      return Response.json(
+        { ok: false, error: 'Pedido no encontrado' },
+        { status: 404 }
+      )
+    }
+
+    const pedidoId = exists[0].pedido_id
+
+    const now = new Date()
+
+    // Actualizar estado + timestamp
+    switch (estado) {
+      case 'ACEPTADO':
+        await sql`
+          UPDATE sub_pedidos 
+          SET estado = ${estado}, aceptado_en = ${now}
+          WHERE id = ${id}
+        `
+        break
+      case 'LISTO':
+        await sql`
+          UPDATE sub_pedidos 
+          SET estado = ${estado}, listo_en = ${now}
+          WHERE id = ${id}
+        `
+        break
+      case 'EN_CAMINO':
+        await sql`
+          UPDATE sub_pedidos 
+          SET estado = ${estado}, recogido_en = ${now}
+          WHERE id = ${id}
+        `
+        break
+      case 'ENTREGADO':
+        await sql`
+          SELECT confirmar_entrega_subpedido(
+            ${id}::uuid, ${user.id}::uuid, 'ADMIN',
+            ${notas || 'Cierre manual por administrador'}
+          )
+        `
+        break
+      default:
+        await sql`
+          UPDATE sub_pedidos 
+          SET estado = ${estado}
+          WHERE id = ${id}
+        `
+    }    // 🔔 Notificar al cliente
+    try {
+      // Traer usuario y restaurante
+      const info = (await sql`
+        SELECT 
+          sp.pedido_id,
+          p.usuario_id,
+          r.nombre as restaurante_nombre,
+          sp.tiempo_estimado,
+          u.nombre as driver_nombre
+        FROM sub_pedidos sp
+        INNER JOIN pedidos p ON p.id = sp.pedido_id
+        INNER JOIN restaurantes r ON r.id = sp.restaurante_id
+        LEFT JOIN usuarios u ON u.id = sp.driver_id
+        WHERE sp.id = ${id}
+        LIMIT 1
+      `) as any[]
+
+      if (info.length > 0) {
+        const row = info[0]
+        const usuarioId = row.usuario_id
+
+        switch (estado) {
+          case 'ACEPTADO':
+            await notificarPedidoAceptado(
+              usuarioId,
+              row.restaurante_nombre,
+              row.tiempo_estimado
+            )
+            break
+          case 'RECHAZADO':
+            await notificarPedidoRechazado(
+              usuarioId,
+              row.restaurante_nombre,
+              notas || null
+            )
+            break
+          case 'LISTO':
+            await notificarPedidoListo(usuarioId, row.restaurante_nombre)
+            break
+          case 'EN_CAMINO':
+            await notificarPedidoEnCamino(
+              usuarioId,
+              row.restaurante_nombre,
+              row.driver_nombre
+            )
+            break
+          case 'ENTREGADO':
+            await notificarPedidoEntregado(usuarioId, row.restaurante_nombre)
+            break
+          case 'CANCELADO':
+            await notificarPedidoCancelado(usuarioId, row.restaurante_nombre)
+            break
+        }
+      }
+    } catch (notifErr) {
+      // No fallar el cambio de estado si la notificación falla
+      console.error('Error enviando notificación:', notifErr)
+    }
+
+    // Registrar en historial
+    if (estado !== 'ENTREGADO') {
+      await sql`
+        INSERT INTO pedido_estado_historial (sub_pedido_id, estado, cambiado_por, notas)
+        VALUES (${id}, ${estado}, ${user.id}, ${notas || null})
+      `
+    }
+
+    // 🔄 RECALCULAR PEDIDO PADRE
+    await recalcularPedido(pedidoId)
+
+    return Response.json({ ok: true })
+  } catch (error) {
+    console.error('PATCH estado error:', error)
+    return Response.json(
+      { ok: false, error: 'Error al cambiar estado' },
+      { status: 500 }
+    )
+  }
+}

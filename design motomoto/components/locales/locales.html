@@ -1,0 +1,71 @@
+<!-- ==================  APARTADO LOCALES (nuevo)  ================== -->
+<section class="lx" id="locales" aria-label="Locales y platos">
+  <div class="lx-cats" id="lxCats" role="tablist" aria-label="Categorías"></div>
+
+  <article class="lx-card" id="lxCard">
+    <div class="lx-veil" aria-hidden="true"></div>
+    <div class="lx-left">
+      <div class="lx-sign" id="lxSign">
+        <div class="lx-chains"><i></i><i></i></div>
+        <div class="lx-board"><span class="lx-logo" id="lxLogo" aria-hidden="true"></span><div class="lx-bt"><span class="tag" id="lxTag"></span><h3 id="lxRest"></h3></div></div>
+      </div>
+      <p class="lx-vert" id="lxVert"></p>
+      <div class="lx-chips" id="lxChips"></div>
+      <div class="lx-plate" id="lxPlate"><span class="lx-shadow"></span><span class="lx-dish" id="lxDish"></span></div>
+      <button class="lx-next" id="lxNext" aria-label="Ver el siguiente plato"><span id="lxNextE"></span></button>
+    </div>
+
+    <div class="lx-right">
+      <div class="lx-nav">
+        <nav class="lx-tabs" id="lxTabs" aria-label="Locales"></nav>
+        <button class="lx-cartb" id="lxCartB" aria-label="Ver mi pedido">
+          <svg viewBox="0 0 24 24"><path d="M3 4h2l2.4 11.2a1.6 1.6 0 0 0 1.6 1.3h8.2a1.6 1.6 0 0 0 1.6-1.2L20.5 8H6"/><circle cx="9.5" cy="20" r="1.4"/><circle cx="17" cy="20" r="1.4"/></svg><span class="cb-l">Mi pedido</span>
+          <span class="n" id="lxN">0</span>
+        </button>
+      </div>
+
+      <div class="lx-info" id="lxInfo">
+        <div class="lx-hr"><span class="hr-pill" id="lxState"></span><button type="button" class="lx-hrb" id="lxHrB" aria-expanded="false">Ver horario</button><div class="lx-hrl" id="lxHrL" hidden></div></div>
+        <h2 id="lxName"></h2>
+        <p id="lxDesc"></p>
+        <div class="lx-buy">
+          <div class="lx-price"><small>Precio</small><b id="lxPrice"></b></div>
+          <span class="lx-time"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span id="lxTime"></span></span>
+          <button class="lx-add" id="lxAdd" type="button"><span id="lxAddT">Agregar al carrito</span><i id="lxAddI">+</i></button>
+        </div>
+        <button class="lx-menub" id="lxMenuB" type="button"><span class="mb-t">Ver todos los productos</span><em class="mb-n" id="lxMenuN"></em><span class="mb-i">→</span></button>
+      </div>
+
+      <div class="lx-cards" id="lxCards"></div>
+      <div class="lx-dots" id="lxDots"></div>
+    </div>
+
+    <!-- carta completa del local (aparece cuando el cartel se oscurece) -->
+    <div class="lx-mx" id="lxMx">
+      <div class="mx-head">
+        <button class="mx-back" id="mxBack" type="button"><span aria-hidden="true">‹</span><span>Volver</span></button>
+        <span class="lx-logo sm" id="mxLogo" aria-hidden="true"></span>
+        <div class="mx-title"><span class="mx-tag" id="mxTag"></span><h3 id="mxName"></h3><small id="mxSub"></small></div>
+        <button class="lx-cartb mx-cart" id="lxCartM" type="button" aria-label="Ver mi pedido">
+          <svg viewBox="0 0 24 24"><path d="M3 4h2l2.4 11.2a1.6 1.6 0 0 0 1.6 1.3h8.2a1.6 1.6 0 0 0 1.6-1.2L20.5 8H6"/><circle cx="9.5" cy="20" r="1.4"/><circle cx="17" cy="20" r="1.4"/></svg><span class="cb-l">Mi pedido</span>
+          <span class="n" id="lxNM">0</span>
+        </button>
+      </div>
+      <div class="mx-subs" id="mxSubs" role="tablist" aria-label="Subcategorías del local" hidden></div>
+      <div class="mx-stage" id="mxStage">
+        <button class="mx-arr l" id="mxL" type="button" aria-label="Producto anterior">‹</button>
+        <div class="mx-view" id="mxView"><div class="mx-track" id="mxTrack"></div></div>
+        <button class="mx-arr r" id="mxR" type="button" aria-label="Producto siguiente">›</button>
+      </div>
+      <div class="mx-foot2"><div class="mx-prog"><div id="mxBar"></div></div><span id="mxCount"></span></div>
+    </div>
+  </article>
+
+  <div class="lx-order" id="lxOrder" hidden>
+    <div class="sum"><b id="lxSumB"></b><small id="lxSumS"></small></div>
+    <button class="lx-see" id="lxSee" type="button">
+      <svg viewBox="0 0 24 24"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2V3z"/><path d="M9 8h6M9 12h6"/></svg>
+      Ver boleta
+    </button>
+  </div>
+</section>

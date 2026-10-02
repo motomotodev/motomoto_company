@@ -1,0 +1,27 @@
+{
+  "name": "motomoto",
+  "version": "0.0.1",
+  "private": true,
+  "packageManager": "pnpm@9.0.0",
+  "scripts": {
+    "dev": "turbo run dev",
+    "dev:admin": "pnpm --filter @motomoto/web-admin dev",
+    "dev:clientes": "pnpm --filter @motomoto/web-clientes dev",
+    "dev:local": "pnpm --filter @motomoto/web-local dev",
+    "dev:driver": "pnpm --filter @motomoto/web-driver dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "clean": "turbo run clean && rm -rf node_modules"
+  },
+  "devDependencies": {
+    "turbo": "latest"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "^1.1.0",
+    "bcryptjs": "^3.0.3"
+  }
+}

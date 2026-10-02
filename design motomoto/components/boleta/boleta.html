@@ -1,0 +1,56 @@
+<!-- BOLETA (carrito) -->
+<div class="rc" id="rc" hidden>
+  <div class="rc-back" id="rcBack"></div>
+  <div class="rc-machine" role="dialog" aria-modal="true" aria-label="Tu boleta de pedido">
+    <div class="rc-slot"><i class="rc-led"></i><button class="rc-x" id="rcClose" type="button" aria-label="Cerrar boleta">✕</button></div>
+    <div class="rc-feed"><div class="rc-pw"><div class="rc-paper" id="rcPaper">
+      <div class="rc-brand">Moto<b>Moto</b></div>
+      <div class="rc-meta" id="rcDate"></div>
+      <div class="rc-title" id="rcTitle">BOLETA DE PEDIDO</div>
+      <div class="rc-meta">N° <span id="rcNoT"></span></div>
+      <hr class="rc-dash">
+      <div id="rcItems"></div>
+      <div class="rc-full">
+        <hr class="rc-dash">
+        <div class="rc-promo" id="rcPromo">
+          <button class="rp-open" id="rpOpen" type="button" aria-expanded="false" aria-controls="rpForm"><span class="rp-ic" aria-hidden="true">🎟️</span><span class="rp-tx">¿Tienes un código de promoción?</span><i aria-hidden="true">+</i></button>
+          <div class="rp-form" id="rpForm" hidden>
+            <input id="rpIn" type="text" maxlength="20" placeholder="Escribe tu código" aria-label="Código de promoción" autocomplete="off" autocapitalize="characters" autocorrect="off" spellcheck="false" enterkeyhint="go">
+            <button id="rpGo" type="button">Aplicar</button>
+          </div>
+          <p class="rp-msg" id="rpMsg" role="status" aria-live="polite"></p>
+          <div class="rp-chips" id="rpChips"></div>
+        </div>
+        <button class="rc-vip" id="rcVip" type="button" role="switch" aria-checked="false">
+          <span class="rv-i" aria-hidden="true">👑</span>
+          <span class="rv-t"><b>Servicio VIP</b><small id="rvSm">Prioridad en tu pedido</small></span>
+          <span class="rv-p" id="rvP">+S/ 2.50</span>
+          <span class="rv-s" aria-hidden="true"><i></i></span>
+        </button>
+        <div class="rc-l"><span>Subtotal</span><span class="rc-sv"><s class="rc-was" id="rcSubWas"></s><span id="rcSub"></span></span></div>
+        <div class="rc-l rc-dl" id="rcDl"><span><em class="rc-dchip">🏷️ <span id="rcDlN"></span></em></span><span id="rcDlV"></span></div>
+        <div class="rc-l rc-vl"><span>👑 Servicio VIP</span><span id="rcVlV">S/ 2.50</span></div>
+        <div class="rc-l"><span id="rcEnvL">Envío</span><span id="rcEnv"></span></div>
+        <div class="rc-l big"><span>TOTAL</span><span id="rcTot"></span></div>
+        <div class="rc-routew"><hr class="rc-dash"><div id="rcRoute"></div></div>
+        <hr class="rc-dash">
+        <div class="rc-thanks">¡GRACIAS!</div>
+        <div class="rc-bar" id="rcBar"></div>
+        <div class="rc-code" id="rcCode"></div>
+      </div>
+      <div class="rc-crown" aria-hidden="true">👑 VIP</div>
+      <div class="rc-stamp">¡PEDIDO LISTO!</div>
+    </div></div></div>
+    <div class="rc-actions">
+      <a class="rc-go" id="rcGo" href="#">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8h12l-1 12H7L6 8z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
+        <span id="rcGoL">Pedir</span><b id="rcGoT"></b>
+      </a>
+      <div class="rc-sub"><button id="rcMore" type="button">Seguir pidiendo</button><button id="rcClear" type="button">Vaciar</button></div>
+    </div>
+  </div>
+  <aside class="rc-side off" id="rcSide" aria-label="Ubicaciones del pedido">
+    <div class="rc-map"><div id="rcMapEl"></div><div class="rc-mmsg" id="rcMapMsg">Cargando mapa…</div></div>
+    <div id="rcPts" style="display:contents"></div>
+  </aside>
+</div>

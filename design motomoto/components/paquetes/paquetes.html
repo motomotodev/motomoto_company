@@ -1,0 +1,35 @@
+<!-- ENVÍO DE PAQUETES -->
+<div class="mp pk" id="pk" hidden>
+  <div class="mp-sheet" role="dialog" aria-modal="true" aria-label="Enviar un paquete">
+    <div class="mp-top"><div><b>📦 Enviar paquete</b><small>De una persona a otra, rápido y seguro</small></div>
+      <button class="mp-close" id="pkClose" type="button" aria-label="Cerrar">✕</button></div>
+    <form class="pk-body" id="pkForm" novalidate autocomplete="off">
+      <div class="pk-s"><h4 class="pk-h"><i>1</i>¿Qué vas a enviar?</h4>
+        <div class="pk-sizes" id="pkSizes"></div>
+        <label class="pk-sw"><input type="checkbox" id="pkFrag"><span class="sw"></span><span>🥚 Es frágil <em>+S/ 2.00</em></span></label>
+        <input class="pk-in" id="pkDesc" placeholder="Describe el paquete (opcional)" maxlength="80"></div>
+      <div class="pk-s pk-route"><h4 class="pk-h"><i>🗺️</i>Ruta · Toca 2 puntos en el mapa</h4>
+        <div class="pk-ab" id="pkAB">
+          <button type="button" class="pk-pt a on" data-p="A"><b>A</b><span><small>Recojo</small><em id="pkAT">Toca el mapa</em></span></button>
+          <button type="button" class="pk-pt b" data-p="B"><b>B</b><span><small>Entrega</small><em id="pkBT">Toca el mapa</em></span></button>
+        </div>
+        <div class="pk-map"><div id="pkMapEl" style="position:absolute;inset:0"></div><div class="pk-mmsg" id="pkMMsg">Cargando mapa…</div><button class="pk-loc" id="pkLoc" type="button">📍 Mi ubicación</button></div>
+        <p class="pk-tip" id="pkTip"></p></div>
+      <div class="pk-s"><h4 class="pk-h"><i>2</i>Recojo · ¿Dónde lo recogemos?</h4>
+        <div class="pk-chips" id="pkFrom"></div>
+        <div class="pk-2"><input class="pk-in" id="pkSN" placeholder="Tu nombre" autocomplete="name"><input class="pk-in" id="pkSP" type="tel" inputmode="tel" placeholder="Tu celular" autocomplete="tel"></div>
+        <div class="pk-ad"><input class="pk-in" id="pkSA" placeholder="Dirección o marca el punto A en el mapa" enterkeyhint="search"><button class="pk-find" type="button" data-f="A" aria-label="Ubicar esta dirección en el mapa">🔎</button></div></div>
+      <div class="pk-s"><h4 class="pk-h"><i>3</i>Entrega · ¿Quién lo recibe?</h4>
+        <div class="pk-chips" id="pkTo"></div>
+        <div class="pk-2"><input class="pk-in" id="pkRN" placeholder="Nombre de quien recibe"><input class="pk-in" id="pkRP" type="tel" inputmode="tel" placeholder="Su celular"></div>
+        <div class="pk-ad"><input class="pk-in" id="pkRA" placeholder="Dirección o marca el punto B en el mapa" enterkeyhint="search"><button class="pk-find" type="button" data-f="B" aria-label="Ubicar esta dirección en el mapa">🔎</button></div></div>
+      <div class="pk-s"><h4 class="pk-h"><i>4</i>¿Quién paga el envío?</h4><div class="pk-chips" id="pkPay"></div></div>
+    </form>
+    <div class="mp-foot"><div class="pk-tot"><small id="pkNote"></small><b id="pkTot">S/ 0.00</b></div><button id="pkGo" type="button">Pedir envío</button></div>
+    <div class="pk-ok" id="pkOk" hidden>
+      <svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="30"/><path d="M36 51l10 10 19-21"/></svg>
+      <h3>¡Envío solicitado!</h3><b id="pkId"></b><p id="pkSum"></p>
+      <button class="pk-done" id="pkDone" type="button">Listo</button>
+    </div>
+  </div>
+</div>

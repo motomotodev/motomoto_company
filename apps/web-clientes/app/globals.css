@@ -1,0 +1,174 @@
+@import "tailwindcss";
+
+@theme {
+  /* ============================================
+     PALETA MOTOMOTO (basada en el logo)
+     ============================================ */
+  --color-brand: #1E3FD1;
+  --color-brand-dark: #0F1E5C;
+  --color-brand-darker: #0F1E5C;
+  --color-brand-light: #5B7BFF;
+
+  /* Fondos */
+  --color-surface: #151515;
+  --color-surface-dark: #0A0A0A;
+  --color-surface-light: #1F1F1F;
+
+  /* Bordes */
+  --color-line: #222222;
+  --color-line-light: #2a2a2a;
+
+  /* Estados */
+  --color-danger: #EF4444;
+  --color-danger-dark: #DC2626;
+  --color-warning: #F5C518;
+  --color-info: #3B82F6;
+
+  /* Extras */
+  --color-jaguar: #F5C518;
+  --color-tucan: #FF6B35;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background-color: var(--color-surface-dark);
+  color: #fff;
+  overscroll-behavior-y: none;
+}
+
+.motomoto-logo-mark {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 1px solid var(--color-brand);
+  border-radius: 50%;
+  background: var(--color-surface-dark);
+}
+.motomoto-logo-mark img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Scrollbar sutil */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 3px;
+}
+
+/* Utilidades mobile-first */
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+/* Animación skeleton */
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 0.3; }
+}
+.skeleton {
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+  background-color: #1F1F1F;
+  border-radius: 8px;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-slide-up {
+  animation: slideUp 0.3s ease-out;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* ============================================
+   MOBILE OPTIMIZATIONS
+   ============================================ */
+
+/* Áreas táctiles mínimas */
+button, a, [role="button"] {
+  touch-action: manipulation;
+}
+
+/* Suavizar scroll en iOS */
+html {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Evitar zoom automático en inputs (iOS) */
+input, textarea, select {
+  font-size: 16px;
+}
+
+/* Safe areas para iPhone con notch */
+.safe-top {
+  padding-top: env(safe-area-inset-top, 0);
+}
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+/* Ocultar scrollbar pero mantener scroll */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Selección de texto deshabilitada en botones */
+button, a {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Prevenir zoom en iOS al tocar inputs */
+@media (max-width: 767px) {
+  input[type='text'],
+  input[type='tel'],
+  input[type='email'],
+  input[type='password'],
+  input[type='number'],
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}

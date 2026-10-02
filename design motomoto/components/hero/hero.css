@@ -1,0 +1,99 @@
+/* ESCENARIO */
+.stage{flex:1;display:grid;gap:18px;align-items:center;justify-items:center;text-align:center;padding:8px 0;position:relative}
+.plate{position:relative;width:min(62vw,300px);aspect-ratio:1;border-radius:50%;display:grid;place-items:center;
+  background:none;
+  font-size:min(40vw,190px);user-select:none}
+/* sombra oscura detrás (para que luzcan los logos de restaurantes) */
+.plate::before{content:'';position:absolute;inset:-22%;border-radius:50%;z-index:-1;
+  background:radial-gradient(circle,rgba(4,7,28,.7) 0%,rgba(4,7,28,.45) 45%,transparent 70%)}
+/* Cambia el emoji por <img src="platos/pizza.png"> (PNG transparente) */
+.plate span{filter:drop-shadow(0 16px 18px rgba(0,0,0,.55))}
+
+.info{width:100%;container-type:inline-size;display:flex;flex-direction:column;align-items:center;gap:10px;position:relative;z-index:2}
+.kicker{font-size:.76rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#fff;
+  background:var(--blue-700);padding:6px 14px;border-radius:999px;box-shadow:0 0 18px rgba(44,79,232,.7)}
+.title{text-transform:uppercase;line-height:.95;max-width:100%}
+.title .l{display:block;overflow:hidden;padding:.06em .3em;margin:0 -.3em;white-space:nowrap}
+.title .l1{font-weight:400;font-size:clamp(1.8rem,12.5cqw,4rem);text-shadow:0 3px 10px rgba(0,0,0,.5)}
+.title .l2{font-weight:900;font-size:clamp(1.9rem,14cqw,4.4rem);color:#0A2BFF;
+  -webkit-text-stroke:.085em #fff;paint-order:stroke fill;text-shadow:0 4px 12px rgba(0,0,0,.45)}
+.title i{display:inline-block;font-style:inherit}
+
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:6px}
+.cta{display:inline-flex;align-items:center;gap:9px;background:linear-gradient(135deg,#25D366,#1FB855);
+  color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.25);font-weight:800;padding:14px 24px;border-radius:999px;text-decoration:none;font-size:1rem;font-family:inherit;
+  border:0;box-shadow:0 8px 24px rgba(37,211,102,.45);
+  transition:transform .2s;animation:pulse 2.4s ease-in-out infinite}
+.cta:hover{transform:translateY(-2px) scale(1.03)}
+.cta svg{width:20px;height:20px;fill:currentColor}
+.cta.go{background:linear-gradient(135deg,#FF8A3D,#FF6A13);box-shadow:0 8px 24px rgba(255,122,41,.5);animation:pulseO 2.4s ease-in-out infinite}
+@keyframes pulseO{50%{box-shadow:0 0 34px rgba(255,122,41,.85),0 8px 24px rgba(255,122,41,.5)}}
+.cta.go svg{fill:none;transition:transform .25s}
+.cta.go:hover svg{transform:translateX(4px)}
+.ghost{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.35);text-shadow:none;box-shadow:none;animation:none}
+@keyframes pulse{50%{box-shadow:0 0 34px rgba(37,211,102,.8),0 8px 24px rgba(37,211,102,.45)}}
+
+/* tarjeta */
+.card{width:min(100%,340px);border-radius:26px;padding:18px;text-align:left;z-index:2}
+.tabs{display:flex;gap:16px;font-size:.8rem;font-weight:700;opacity:.8;margin-bottom:12px}
+.tabs b{opacity:1;border-bottom:2px solid var(--orange);padding-bottom:3px}
+.rate{display:flex;align-items:center;gap:14px}
+.score{min-width:64px;height:64px;border-radius:18px;background:linear-gradient(135deg,var(--blue-600),var(--blue-700));
+  display:grid;place-items:center;font-size:1.5rem;font-weight:900;box-shadow:0 0 18px rgba(44,79,232,.6)}
+.rate h3{font-size:1.05rem;font-weight:900}
+.rate small{opacity:.75;font-size:.75rem}
+.card p{margin-top:12px;font-size:.85rem;line-height:1.4;opacity:.92}
+.meta{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.meta span{font-size:.75rem;font-weight:800;padding:6px 11px;border-radius:999px;background:rgba(255,255,255,.14)}
+
+/* CATEGORÍAS */
+.dock{position:relative;border-radius:28px;padding:12px 8px 0;overflow:hidden}
+.row{display:flex;align-items:center;gap:6px}
+.arrow{flex:none;width:38px;height:38px;border-radius:50%;border:0;background:rgba(255,255,255,.1);
+  color:#fff;font-size:1.1rem;cursor:pointer;transition:background .2s,transform .2s;font-family:inherit}
+.arrow:hover{background:var(--blue-600);transform:scale(1.1)}
+/* siempre 3 categorías visibles; las demás quedan ocultas y aparecen al desplazarse */
+:root{--tw:76px;--gap:8px}
+.thumbs{position:relative;flex:none;width:calc(3*var(--tw) + 2*var(--gap) + 8px);display:flex;gap:var(--gap);overflow:hidden;padding:6px 4px 10px}
+.t{flex:none;width:var(--tw);padding:7px 4px;border-radius:18px;border:0;
+  background:transparent;color:#fff;cursor:pointer;font-family:inherit;text-align:center;
+  display:flex;flex-direction:column;align-items:center;gap:5px;transition:all .35s var(--ease)}
+.t .d{width:44px;height:44px;border-radius:50%;background:transparent;display:grid;place-items:center;font-size:1.9rem;
+  filter:drop-shadow(0 4px 6px rgba(0,0,0,.5));transition:transform .35s var(--ease)}
+.t small{font-size:.7rem;font-weight:800;opacity:.8}
+.t.on{background:rgba(255,255,255,.16);transform:translateY(-2px)}
+.t.on .d{transform:scale(1.15) rotate(360deg);transition-duration:.7s}
+.t.on small{opacity:1;color:#fff}
+.bar{height:4px;background:rgba(255,255,255,.18);margin:0 -8px}
+.bar div{height:100%;width:0;background:var(--blue-400);box-shadow:0 0 10px var(--blue-400)}
+.bar.run div{animation:fill var(--dur,5s) linear forwards}
+@keyframes fill{to{width:100%}}
+@keyframes fillv{to{height:100%}}
+
+/* ANIMACIONES */
+.stage .plate{transition:transform .7s var(--ease),opacity .4s}
+.stage.out .plate{transform:rotate(calc(var(--dir) * 140deg)) scale(.5) translateX(calc(var(--dir) * -30px));opacity:0;transition-duration:.35s;transition-timing-function:ease-in}
+.stage.pre .plate{transform:rotate(calc(var(--dir) * -140deg)) scale(.5);opacity:0;transition:none}
+.title i{transition:transform .55s var(--ease),opacity .4s;transition-delay:calc(var(--i) * 28ms)}
+.stage.out .title i{transform:translateY(-110%);opacity:0;transition-duration:.25s;transition-delay:calc(var(--i) * 12ms)}
+.stage.pre .title i{transform:translateY(110%);opacity:0;transition:none}
+.fade{transition:transform .5s var(--ease),opacity .4s}
+.stage.out .fade{opacity:0;transform:translateY(12px);transition-duration:.25s}
+.stage.pre .fade{opacity:0;transform:translateY(-12px);transition:none}
+
+/* ESCRITORIO */
+@media (min-width:769px){
+  .stage{grid-template-columns:minmax(0,.8fr) minmax(0,1.5fr) minmax(250px,300px);text-align:left;justify-items:stretch;gap:26px}
+  .dock{width:fit-content;margin:0 auto}
+  .plate{width:min(100%,40vh,380px);font-size:min(12vw,20vh,230px);justify-self:center}
+  .info{align-items:flex-start}
+  .actions{justify-content:flex-start}
+  .card{justify-self:end;width:100%}
+}
+
+/* ===== categorías: todas las que caben ===== */
+.dock{width:fit-content;max-width:100%;margin:0 auto}
+.row{max-width:100%}
+.thumbs{flex:0 1 auto;width:auto;min-width:0;overflow-x:auto;overflow-y:hidden;scrollbar-width:none}
+.thumbs::-webkit-scrollbar{display:none}
+@media (max-width:420px){:root{--tw:64px;--gap:6px}}

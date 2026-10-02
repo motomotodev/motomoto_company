@@ -1,0 +1,64 @@
+# ============================================
+# DEPENDENCIAS
+# ============================================
+node_modules/
+.pnpm-store/
+
+# ============================================
+# VARIABLES DE ENTORNO
+# ============================================
+.env
+.env*.local
+.env.local
+.env.production
+
+# Exportaciones de datos reales (PII, pedidos y hashes de contraseñas)
+/backend/database/private-data/
+/backend/database/backups/
+
+# ============================================
+# BUILDS
+# ============================================
+.next/
+dist/
+out/
+build/
+.turbo/
+
+# ============================================
+# LOGS
+# ============================================
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+
+# ============================================
+# SISTEMA
+# ============================================
+.DS_Store
+Thumbs.db
+
+# ============================================
+# IDE
+# ============================================
+.vscode/
+.idea/
+*.swp
+
+# ============================================
+# FLUTTER
+# ============================================
+.flutter-plugins
+.dart_tool/
+
+# Firebase service-account credentials
+/backend/serviceAccountKey.json
+**/serviceAccountKey*.json
+
+# Firebase service-account credentials
+/backend/serviceAccountKey.json
+/backend/asd.json
+/backend/assd.json
+**/serviceAccountKey*.json
+**/*firebase-adminsdk*.json

@@ -1,0 +1,70 @@
+/* ===== LISTA DE RESTAURANTES ===== */
+.rl{width:100%;max-width:1100px;margin:0 auto;padding:36px 16px calc(64px + env(safe-area-inset-bottom));scroll-margin-top:8px}
+.rl-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:16px}
+.rl-k{display:inline-block;font-size:.72rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;background:var(--blue-700);padding:5px 12px;border-radius:999px;box-shadow:0 0 16px rgba(44,79,232,.6);margin-bottom:8px}
+.rl-head h2{font-size:clamp(1.7rem,6vw,2.7rem);font-weight:900;text-transform:uppercase;line-height:.95;text-shadow:0 3px 10px rgba(0,0,0,.5)}
+.rl-head h2 b{color:var(--blue-400)}
+.rl-n{font-weight:800;font-size:.8rem;padding:7px 14px;border-radius:999px;background:rgba(0,0,0,.48);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.rl-tools{display:grid;gap:8px;margin-bottom:18px}
+.rl-row{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:2px 2px 6px}
+.rl-row::-webkit-scrollbar{display:none}
+.rl-row button{flex:none;border:0;cursor:pointer;color:#fff;font:800 .82rem var(--font);padding:9px 15px;border-radius:999px;background:rgba(0,0,0,.48);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);transition:background .25s,transform .3s var(--ease),box-shadow .25s}
+.rl-row button:hover{transform:translateY(-2px)}
+.rl-row button.on{background:var(--blue-600);box-shadow:0 0 18px rgba(44,79,232,.7)}
+#rlSort button.on{background:var(--orange);box-shadow:0 0 18px rgba(255,122,41,.55)}
+.rl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,310px),1fr));gap:16px}
+.rl-c{position:relative;display:flex;flex-direction:column;border-radius:26px;overflow:hidden;cursor:pointer;background:rgba(8,11,32,.82);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.12);box-shadow:0 12px 30px rgba(0,0,0,.35);opacity:0;transform:translateY(28px) scale(.97);transition:opacity .5s,transform .6s var(--ease),border-color .3s,box-shadow .3s;transition-delay:calc(var(--i)*55ms),calc(var(--i)*55ms),0s,0s}
+.rl-c.in{opacity:1;transform:none}
+.rl-c.in:hover,.rl-c.in:focus-visible{transform:translateY(-6px);border-color:var(--blue-400);box-shadow:0 18px 40px rgba(0,0,0,.5),0 0 26px rgba(44,79,232,.45);transition-delay:0s}
+.rl-ban{position:relative;height:92px;overflow:hidden}
+.rl-ban::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,rgba(8,11,32,.85))}
+.rl-wm{position:absolute;right:-6px;top:-8px;font-size:5.6rem;opacity:.28;transform:rotate(14deg);transition:transform .6s var(--ease)}
+.rl-c:hover .rl-wm{transform:rotate(-6deg) scale(1.15)}
+.rl-tag{position:absolute;z-index:1;top:12px;right:12px;font-size:.66rem;font-weight:800;padding:5px 10px;border-radius:999px;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.25)}
+.rl-lg{position:absolute;z-index:2;top:58px;left:16px;width:62px;height:62px;font-size:1.9rem;border:3px solid #0b0f24;box-shadow:0 8px 18px rgba(0,0,0,.5)}
+.rl-b{padding:38px 16px 16px;display:flex;flex-direction:column;gap:10px}
+.rl-b h3{font-size:1.1rem;font-weight:900;line-height:1.1}
+.rl-b p{font-size:.76rem;font-weight:700;color:rgba(255,255,255,.62);margin-top:-6px}
+.rl-m{display:flex;flex-wrap:wrap;gap:6px}
+.rl-m span{font-size:.72rem;font-weight:800;padding:5px 10px;border-radius:999px;background:rgba(255,255,255,.09)}
+.rl-m span:first-child{background:rgba(255,193,7,.16);color:#ffd45c}
+.rl-m .km{background:rgba(37,211,102,.16);color:#5be38f}
+.rl-d{display:flex;align-items:center;gap:6px}
+.rl-d i{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;font-style:normal;font-size:1.3rem;background:rgba(255,255,255,.08);overflow:hidden}
+.rl-d i img{width:100%;height:100%;object-fit:contain}
+.rl-d em{margin-left:auto;font-style:normal;font-size:.72rem;font-weight:800;color:rgba(255,255,255,.65)}
+.rl-go{display:flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:999px;padding:11px;background:var(--blue-600);color:#fff;font:800 .85rem var(--font);cursor:pointer;pointer-events:none;transition:background .25s}
+.rl-go span{transition:transform .3s var(--ease)}
+.rl-c:hover .rl-go{background:var(--orange)}.rl-c:hover .rl-go span{transform:translateX(5px)}
+.rl-empty{grid-column:1/-1;text-align:center;padding:40px 12px;font-weight:800;color:rgba(255,255,255,.7)}
+
+/* ===== TARJETAS DE RESTAURANTES · card con pincelada y logo que sobresale ===== */
+.rl-grid{grid-template-columns:repeat(auto-fill,minmax(min(100%,215px),1fr));gap:64px 20px;padding:8px 4px 40px}
+.rl-c{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;overflow:visible;border:0;border-radius:0;background:none;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;padding:20px 16px 0;transform:translateY(20px)}
+.rl-c.in:hover,.rl-c.in:focus-visible{transform:translateY(-6px);border:0;box-shadow:none}
+.rl-c:focus-visible{outline:2px solid #fff;outline-offset:8px}
+.rl-c>*{position:relative;z-index:1}
+.rl-c>.rl-bg{position:absolute;z-index:0;inset:0;filter:url(#mmRough) drop-shadow(0 10px 12px rgba(0,0,0,.4))}
+.rl-bg::after{content:'';position:absolute;inset:9px;border:1.5px solid rgba(255,255,255,.55);border-radius:4px}
+.rl-go{display:inline-flex;align-items:center;justify-content:center;gap:6px;width:auto;padding:8px 18px;border-radius:999px;background:linear-gradient(135deg,#ff6a2b,#e0301e);color:#fff;font:900 .8rem var(--font);box-shadow:0 4px 0 rgba(0,0,0,.28);pointer-events:none;transition:transform .3s var(--ease)}
+.rl-c:hover .rl-go{background:linear-gradient(135deg,#ff6a2b,#e0301e);transform:scale(1.06)}
+.rl-b{padding:0;margin-top:12px;gap:6px;align-items:center}
+.rl-b h3{font-size:1.05rem;text-shadow:0 2px 4px rgba(0,0,0,.4)}
+.rl-b p{margin:0;font-size:.72rem;color:rgba(255,255,255,.88);text-shadow:0 1px 3px rgba(0,0,0,.4)}
+.rl-m{justify-content:center;gap:5px}
+.rl-m span{font-size:.66rem;padding:3px 8px;background:rgba(0,0,0,.3);color:#fff}
+.rl-m span:first-child{background:rgba(0,0,0,.3);color:#ffd45c}
+.rl-m .km{background:rgba(0,0,0,.3);color:#7dffa8}
+.rl-m .rl-tag{position:static;background:#fff;color:#c2410c;border:0;font-size:.62rem;padding:3px 9px}
+.rl-lg{position:relative;top:auto;left:auto;width:108px;height:108px;margin:12px 0 -48px;border-width:4px;box-shadow:0 14px 22px rgba(0,0,0,.5);transition:transform .5s var(--ease)}
+.rl-lg .lg-e{font-size:3.1rem}
+.rl-lg img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.rl-c:hover .rl-lg{transform:translateY(-6px) rotate(-6deg) scale(1.07)}
+@media (max-width:560px){
+  .rl-grid{grid-template-columns:1fr 1fr;gap:58px 12px}
+  .rl-c{padding:16px 10px 0}
+  .rl-go{padding:7px 14px;font-size:.74rem}
+  .rl-b h3{font-size:.92rem}
+  .rl-lg{width:92px;height:92px;margin-bottom:-42px}
+  .rl-lg .lg-e{font-size:2.6rem}
+}

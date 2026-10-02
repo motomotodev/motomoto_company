@@ -1,0 +1,27 @@
+<!-- ==================  BARRA INFERIOR MÓVIL  ================== -->
+<nav class="mn" id="mn" aria-label="Navegación principal" style="--a:0">
+  <span class="mn-pill" aria-hidden="true"></span>
+  <button class="mn-i on" type="button" data-t="home" aria-current="page">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.2 12 3.5l9 7.7V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg><span>Inicio</span>
+  </button>
+  <button class="mn-i" type="button" data-t="menu">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg><span>Menú</span>
+  </button>
+  <button class="mn-i" type="button" data-t="orders">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 8h13l-1 12.5h-11z"/><path d="M9 8V6.6a3 3 0 0 1 6 0V8"/></svg><span>Pedidos</span>
+    <b class="mn-b" id="mnBo" hidden>0</b>
+  </button>
+  <button class="mn-i" type="button" data-t="favs">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-8-4.9-9.5-10C1.6 7.6 3.7 4.5 7 4.5c2 0 3.8 1.1 5 3 1.2-1.9 3-3 5-3 3.3 0 5.4 3.1 4.5 6.5C20 16.1 12 21 12 21z"/></svg><span>Favoritos</span>
+    <b class="mn-b pink" id="mnBf" hidden>0</b>
+  </button>
+  <button class="mn-i" type="button" data-t="profile">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.6"/><path d="M4.8 20.5c.6-4 3.6-6 7.2-6s6.6 2 7.2 6"/></svg><span>Perfil</span>
+  </button>
+</nav>
+<div class="ms-scrim" id="msScrim" hidden></div>
+<section class="ms" id="ms" hidden role="dialog" aria-modal="false" aria-labelledby="msT">
+  <div class="ms-head" id="msHead"><i class="ms-grip" aria-hidden="true"></i>
+    <div class="ms-row"><h3 id="msT"></h3><button class="ms-x" id="msX" type="button" aria-label="Cerrar">✕</button></div></div>
+  <div class="ms-b" id="msB"></div>
+</section>

@@ -1,0 +1,34 @@
+  <main class="stage" id="stage" style="--dir:1">
+    <div class="plate" id="plate"><span id="emoji"></span></div>
+
+    <div class="info">
+      <div class="kicker fade" id="kicker"></div>
+      <h1 class="title" id="title"></h1>
+      <div class="actions fade">
+        <a class="cta go" id="openLocales" href="#locales">
+          Ver producto
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <button class="cta ghost" id="pkOpen" type="button"><svg viewBox="0 0 24 24" aria-hidden="true" style="fill:none;stroke:currentColor;stroke-width:2.2;stroke-linejoin:round;stroke-linecap:round"><path d="M21 8 12 3 3 8v8l9 5 9-5V8z"/><path d="m3 8 9 5 9-5M12 13v8"/></svg>Enviar paquete</button>
+      </div>
+    </div>
+
+    <aside class="card glass fade">
+      <div class="tabs"><b>Resumen</b><span>Locales</span></div>
+      <div class="rate">
+        <div class="score" id="score">0.0</div>
+        <div><h3 id="place"></h3><small id="area"></small></div>
+      </div>
+      <p id="desc"></p>
+      <div class="meta" id="meta"></div>
+    </aside>
+  </main>
+
+  <section class="dock glass" aria-label="Categorías">
+    <div class="row">
+      <button class="arrow" id="prev" aria-label="Anterior">‹</button>
+      <div class="thumbs" id="thumbs"></div>
+      <button class="arrow" id="next" aria-label="Siguiente">›</button>
+    </div>
+    <div class="bar" id="bar"><div></div></div>
+  </section>

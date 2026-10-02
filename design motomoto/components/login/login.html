@@ -1,0 +1,30 @@
+<!-- LOGIN (aparece al pulsar Pedir) -->
+<div class="au" id="au" hidden>
+  <div class="au-back" id="auBack"></div>
+  <div class="au-card" role="dialog" aria-modal="true" aria-labelledby="auT">
+    <button class="au-x" id="auX" type="button" aria-label="Cerrar">✕</button>
+    <aside class="au-side">
+      <div class="au-brand">Moto<b>Moto</b></div>
+      <div class="au-ico" aria-hidden="true">🛵</div>
+      <h3>Tu pedido sale en un minuto</h3>
+      <ul><li>Sigue tus pedidos desde Perfil</li><li>Tus datos quedan listos para la próxima</li><li>Repite un pedido con un toque</li></ul>
+    </aside>
+    <div class="au-main">
+      <div class="au-grab"></div>
+      <h2 id="auT">Ingresa para pedir</h2>
+      <p class="au-sub" id="auSub"></p>
+      <div class="au-seg" role="tablist" aria-label="Tipo de acceso"><i></i>
+        <button type="button" role="tab" data-m="in" aria-selected="true">Ingresar</button>
+        <button type="button" role="tab" data-m="up" aria-selected="false">Crear cuenta</button></div>
+      <div class="au-nm" id="auName"><div class="au-f"><label for="auN">Nombre</label><input id="auN" type="text" autocomplete="name" maxlength="40" placeholder="Tu nombre"></div></div>
+      <div class="au-f"><label for="auP">Celular</label><div class="au-ph"><span>🇵🇪 +51</span><input id="auP" type="tel" inputmode="numeric" autocomplete="tel-national" maxlength="11" placeholder="999 999 999"></div></div>
+      <div class="au-f"><span class="au-l" id="auPl">PIN de 4 dígitos</span>
+        <div class="au-pin" id="auPin" role="group" aria-labelledby="auPl">
+          <input type="password" inputmode="numeric" maxlength="1" autocomplete="off" aria-label="Dígito 1"><input type="password" inputmode="numeric" maxlength="1" autocomplete="off" aria-label="Dígito 2"><input type="password" inputmode="numeric" maxlength="1" autocomplete="off" aria-label="Dígito 3"><input type="password" inputmode="numeric" maxlength="1" autocomplete="off" aria-label="Dígito 4"></div>
+        <button class="au-eye" id="auEye" type="button">Mostrar PIN</button></div>
+      <p class="au-err" id="auE" role="alert" hidden></p>
+      <button class="au-go" id="auGo" type="button"><span id="auGoL">Ingresar y pedir</span></button>
+      <p class="au-note">Tu cuenta se guarda solo en este dispositivo.</p>
+    </div>
+  </div>
+</div>
