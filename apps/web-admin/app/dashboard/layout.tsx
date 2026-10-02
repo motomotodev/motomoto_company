@@ -12,6 +12,7 @@ const NAV_ITEMS = [
   { href: '/dashboard/drivers', label: 'Drivers', icon: '🏍️' },
   { href: '/dashboard/clientes', label: 'Clientes', icon: '👥' },
   { href: '/dashboard/promociones', label: 'Promociones', icon: '🎨' },
+  { href: '/dashboard/videos', label: 'Videos de fondo', icon: '🎬' },
   { href: '/dashboard/solicitudes', label: 'Solicitudes', icon: '🔑' },
   { href: '/dashboard/admins', label: 'Admins', icon: '🔐' },
   { href: '/dashboard/configuracion', label: 'Configuración', icon: '⚙️' },

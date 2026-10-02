@@ -9,6 +9,7 @@ Estos archivos son referencias y cambios versionados del esquema. La base Neon d
 - `005_driver_overdue_commission_block.sql`: impide tomar pedidos con comisión pendiente vencida por 48 horas.
 - `006_comision_local_autopedidos.sql`: separa comisiones de locales para pedidos normales y autopedidos preferenciales; copia la última tasa normal como tasa inicial de autopedido sin recalcular snapshots ni deudas existentes.
 - `007_driver_completes_delivery.sql`: permite que el driver finalice la entrega y registre las comisiones; el acuse posterior del cliente/local es opcional e idempotente.
+- `013_videos_fondo.sql`: crea el catálogo de videos de fondo para WEB y MOVIL sin agregar URLs de ejemplo.
 
 La fotografía actual del esquema está en `backend/database/schema/`. Para cualquier cambio futuro, comparar primero esa estructura real, preparar un cambio incremental revisable y respaldar Neon antes de aplicar nada.
 
