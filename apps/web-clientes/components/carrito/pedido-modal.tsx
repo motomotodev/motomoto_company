@@ -183,7 +183,7 @@ export default function PedidoModal({ open, onClose, estaLogueado, direccionDeBD
                 <span className="mm-order-item-name">{item.plato_nombre}{item.opciones.length > 0 && <small>{item.opciones.map((opcion) => opcion.choice_nombre).join(' · ')}</small>}</span>
                 <strong>{soles(item.precio_unitario * item.cantidad)}</strong>
               </div>)}
-              <small className="mm-order-delivery-label">Delivery · {envios[grupo.id]?.distancia_km != null ? `${envios[grupo.id].distancia_km.toFixed(1)} km` : 'calculando'}</small>
+              <small className="mm-order-delivery-label">Delivery · {envios[grupo.id]?.distancia_km?.toFixed(1) ?? 'calculando'}{envios[grupo.id]?.distancia_km != null ? ' km' : ''}</small>
             </div>) : <div className="mm-order-empty"><span>🧾</span><b>Tu boleta está vacía</b><small>Agrega platos y aparecerán aquí.</small></div>}
             <hr />
             <details className="mm-order-tip"><summary>💰 ¿Agregar propina para el repartidor?</summary><div>{[0, 1, 2, 3].map((value) => <button key={value} type="button" aria-pressed={propina === value} onClick={() => setPropina(value)}>{value ? `S/ ${value}` : 'No'}</button>)}</div></details>
