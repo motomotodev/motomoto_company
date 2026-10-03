@@ -102,6 +102,42 @@ body {
   to { opacity: 1; transform: rotate(-45deg) scale(1); }
 }
 
+.mm-restaurants { position: relative; }
+.mm-filter-row { display: flex; gap: .5rem; overflow-x: auto; padding: 2px 2px 7px; scrollbar-width: none; }
+.mm-filter-row::-webkit-scrollbar { display: none; }
+.mm-filter-chip { flex: none; border: 1px solid rgb(255 255 255 / .1); border-radius: 999px; background: rgb(0 0 0 / .52); padding: .55rem .95rem; color: white; font-family: "MotoMoto Sharpie", ui-sans-serif, system-ui, sans-serif; font-size: .78rem; font-weight: 800; backdrop-filter: blur(9px); transition: transform .22s ease, background .22s ease, box-shadow .22s ease; }
+.mm-filter-chip:hover { transform: translateY(-2px); }
+.mm-filter-chip.is-active { border-color: transparent; background: #2447db; box-shadow: 0 0 18px rgb(44 79 232 / .48); }
+.mm-sort-chip.is-active { background: #ff7628; box-shadow: 0 0 18px rgb(255 122 41 / .38); }
+.mm-restaurant-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 62px 18px; padding: 8px 4px 44px; }
+.mm-restaurant-card { position: relative; z-index: 0; display: flex; min-width: 0; min-height: 270px; flex-direction: column; align-items: center; overflow: visible; padding: 20px 13px 0; color: white; text-align: center; text-decoration: none; isolation: isolate; opacity: 0; animation: mm-restaurant-enter .5s cubic-bezier(.2,.8,.2,1) forwards; animation-delay: calc(var(--restaurant-index, 0) * 55ms); transition: transform .35s cubic-bezier(.2,.8,.2,1); }
+.mm-restaurant-card:hover, .mm-restaurant-card:focus-visible { z-index: 1; transform: translateY(-6px); outline: none; }
+.mm-restaurant-card:focus-visible .mm-restaurant-paint { outline: 2px solid white; outline-offset: 4px; }
+.mm-restaurant-paint { position: absolute; z-index: -1; inset: 0; background: var(--restaurant-paint); filter: url(#mmRestaurantRough) drop-shadow(0 10px 12px rgb(0 0 0 / .42)); }
+.mm-restaurant-paint::after { position: absolute; inset: 9px; border: 1.5px solid rgb(255 255 255 / .5); border-radius: 4px; content: ""; }
+.mm-restaurant-availability { position: absolute; top: 13px; right: 16px; border: 1px solid rgb(255 255 255 / .15); border-radius: 999px; background: rgb(0 0 0 / .4); padding: 4px 9px; color: #9bffb8; font-size: .59rem; font-weight: 800; }
+.mm-restaurant-availability.is-closed { color: #ffe4d5; }
+.mm-restaurant-cta { display: inline-flex; align-items: center; justify-content: center; gap: 7px; margin-top: 2px; border-radius: 999px; background: linear-gradient(135deg,#ff6a2b,#e0301e); padding: 8px 18px; box-shadow: 0 4px 0 rgb(0 0 0 / .25); font-family: "MotoMoto Sharpie", ui-sans-serif, system-ui, sans-serif; font-size: .78rem; font-weight: 900; transition: transform .28s ease; }
+.mm-restaurant-cta span { transition: transform .25s ease; }
+.mm-restaurant-card:hover .mm-restaurant-cta { transform: scale(1.06); }
+.mm-restaurant-card:hover .mm-restaurant-cta span { transform: translateX(4px); }
+.mm-restaurant-copy { display: flex; width: 100%; flex-direction: column; align-items: center; gap: 7px; margin-top: 11px; }
+.mm-restaurant-copy > strong { max-width: 100%; overflow: hidden; font-family: "MotoMoto Sharpie", ui-sans-serif, system-ui, sans-serif; font-size: 1rem; font-weight: 900; line-height: 1.15; text-overflow: ellipsis; text-shadow: 0 2px 4px rgb(0 0 0 / .55); white-space: nowrap; }
+.mm-restaurant-subtitle { max-width: 100%; overflow: hidden; color: rgb(255 255 255 / .88); font-size: .69rem; font-weight: 700; text-overflow: ellipsis; text-shadow: 0 1px 3px rgb(0 0 0 / .5); white-space: nowrap; }
+.mm-restaurant-meta { display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; }
+.mm-restaurant-meta span { border-radius: 999px; background: rgb(0 0 0 / .34); padding: 4px 8px; color: white; font-size: .62rem; font-weight: 800; }
+.mm-restaurant-meta span:first-child { color: #ffe17c; }
+.mm-restaurant-meta .mm-distance-pill { color: #9bffb8; }
+.mm-restaurant-closed-note { color: #ffe7d7; font-size: .63rem; }
+.mm-restaurant-logo { position: relative; display: grid; width: 100px; height: 100px; flex: none; place-items: center; overflow: hidden; margin: auto 0 -43px; border: 4px solid #10111a; border-radius: 50%; background: rgb(0 0 0 / .72); box-shadow: 0 12px 22px rgb(0 0 0 / .48), inset 0 0 0 1px rgb(255 255 255 / .35); font-size: 2.9rem; transition: transform .4s cubic-bezier(.2,.8,.2,1); }
+.mm-restaurant-logo::after { position: absolute; inset: 5px; border: 1px dashed rgb(255 255 255 / .55); border-radius: inherit; content: ""; pointer-events: none; }
+.mm-restaurant-logo img { width: 100%; height: 100%; object-fit: cover; }
+.mm-restaurant-card:hover .mm-restaurant-logo { transform: translateY(-6px) rotate(-6deg) scale(1.06); }
+.mm-restaurant-empty { grid-column: 1 / -1; border: 1px solid rgb(255 255 255 / .12); border-radius: 24px; background: rgb(0 0 0 / .55); padding: 36px 14px; color: rgb(255 255 255 / .72); text-align: center; backdrop-filter: blur(10px); }
+@keyframes mm-restaurant-enter { from { opacity: 0; transform: translateY(22px) scale(.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@media (max-width: 800px) { .mm-restaurant-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 54px 12px; } .mm-restaurant-card { min-height: 270px; padding: 18px 9px 0; } .mm-restaurant-logo { width: 90px; height: 90px; margin-bottom: -39px; } .mm-restaurant-copy > strong { font-size: .9rem; } .mm-restaurant-availability { right: 9px; font-size: .52rem; } .mm-restaurant-cta { padding: 7px 13px; font-size: .7rem; } }
+@media (prefers-reduced-motion: reduce) { .mm-restaurant-card { opacity: 1; animation: none; transition: none; } .mm-restaurant-logo, .mm-restaurant-cta { transition: none; } }
+
 .motomoto-logo-mark {
   display: inline-flex;
   flex: 0 0 auto;
@@ -135,6 +171,112 @@ body {
 /* Utilidades mobile-first */
 .safe-bottom {
   padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+@keyframes mm-header-social-in {
+  from { opacity: 0; transform: translateY(-8px) scale(.9); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.mm-social-link {
+  animation: mm-header-social-in .5s cubic-bezier(.2,.8,.2,1) backwards;
+  transition: transform .3s cubic-bezier(.2,.8,.2,1), background .25s, box-shadow .25s, border-color .25s;
+}
+.mm-social-link svg { transition: transform .35s cubic-bezier(.2,.8,.2,1); }
+.mm-social-link:hover,
+.mm-social-link:focus-visible {
+  transform: translateY(-3px) scale(1.1);
+  border-color: transparent;
+  box-shadow: 0 8px 18px rgb(0 0 0 / 40%);
+}
+.mm-social-link:hover svg,
+.mm-social-link:focus-visible svg { transform: rotate(-8deg) scale(1.1); }
+.mm-social-link[data-social='tiktok']:hover { background: #050505; box-shadow: -3px -2px 0 #25f4ee, 3px 2px 0 #fe2c55; }
+.mm-social-link[data-social='whatsapp']:hover { background: #25d366; }
+.mm-social-link[data-social='facebook']:hover { background: #1877f2; }
+.mm-social-link[data-social='instagram']:hover { background: linear-gradient(45deg, #feda75, #fa7e1e 30%, #d62976 60%, #962fbf 80%, #4f5bd5); }
+.mm-social-link[data-social='youtube']:hover { background: #f00; }
+.mm-social-link[data-social='telegram']:hover { background: #26a5e4; }
+.mm-social-link[data-social='x']:hover { background: #050505; }
+
+@keyframes mm-login-glow {
+  50% { box-shadow: 0 0 22px rgb(255 122 41 / 55%), 0 8px 24px rgb(255 122 41 / 30%); }
+}
+@keyframes mm-login-person-bob {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  45% { transform: translateY(-3px) rotate(-8deg); }
+  70% { transform: translateY(0) rotate(5deg); }
+}
+.motomoto-login-cta {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #ff8a3d, #ff6a13);
+  box-shadow: 0 8px 24px rgb(255 122 41 / 35%);
+  animation: mm-login-glow 2.8s ease-in-out infinite;
+  transition: transform .28s cubic-bezier(.2,.8,.2,1), filter .25s;
+}
+.motomoto-login-cta:hover,
+.motomoto-login-cta:focus-visible { transform: translateY(-2px) scale(1.035); filter: brightness(1.08); }
+.motomoto-login-persona { display: inline-block; font-family: system-ui, sans-serif; font-style: normal; animation: mm-login-person-bob 2s ease-in-out infinite; }
+.motomoto-map-ring::before {
+  position: absolute;
+  inset: -3px;
+  border: 2px solid #ff7628;
+  border-radius: inherit;
+  content: '';
+  pointer-events: none;
+  animation: mm-map-ring 2.6s ease-out infinite;
+}
+@keyframes mm-map-emoji-hop {
+  40% { transform: translateY(-4px) scale(1.12); }
+}
+.motomoto-map-ring:hover button > span:first-child { animation: mm-map-emoji-hop .6s cubic-bezier(.2,.8,.2,1); }
+.motomoto-map-cta { isolation: isolate; }
+.motomoto-map-cta::after {
+  position: absolute;
+  inset: 2px;
+  border: 1px solid rgb(255 255 255 / 12%);
+  border-radius: inherit;
+  content: '';
+  pointer-events: none;
+}
+.motomoto-greeting { animation: mm-greeting-in .55s cubic-bezier(.2,.8,.2,1) both; }
+.motomoto-greeting-avatar { animation: mm-greeting-wave 3.8s ease-in-out infinite; }
+.mm-page-modal-enter { animation: mm-page-modal-enter .28s cubic-bezier(.2,.8,.2,1) both; }
+.mm-favorite-button.is-active { animation: mm-favorite-pop .38s cubic-bezier(.2,.9,.25,1.4); }
+@keyframes mm-page-modal-enter {
+  from { opacity: 0; transform: translateY(12px) scale(.985); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes mm-favorite-pop {
+  0% { transform: scale(.72); }
+  65% { transform: scale(1.22); }
+  100% { transform: scale(1); }
+}
+@keyframes mm-greeting-in {
+  from { opacity: 0; transform: translateY(-5px) scale(.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes mm-greeting-wave {
+  0%, 82%, 100% { transform: rotate(0); }
+  86% { transform: rotate(16deg); }
+  90% { transform: rotate(-10deg); }
+  94% { transform: rotate(12deg); }
+}
+@keyframes mm-map-ring {
+  from { opacity: .8; transform: scale(1); }
+  to { opacity: 0; transform: scale(1.45); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mm-social-link,
+  .motomoto-map-ring button > span:first-child,
+  .motomoto-map-cta,
+  .motomoto-greeting,
+  .motomoto-greeting-avatar,
+  .mm-page-modal-enter,
+  .mm-favorite-button,
+  .motomoto-login-cta,
+  .motomoto-login-persona,
+  .motomoto-map-ring::before { animation: none !important; transition: none !important; }
 }
 
 /* Animación skeleton */

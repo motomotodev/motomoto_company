@@ -38,10 +38,10 @@ export async function PATCH(
 
     const d = parsed.data
 
-    // Verificar celular único
+    // El teléfono debe ser único entre drivers; puede coincidir con el de un cliente.
     const dup = await sql`
       SELECT id FROM usuarios 
-      WHERE celular = ${d.celular} AND id != ${id}
+      WHERE celular = ${d.celular} AND role = 'DRIVER' AND id != ${id}
       LIMIT 1
     `
     if (dup.length > 0) {

@@ -153,7 +153,7 @@ export async function POST(req: NextRequest) {
     }
 
     let customerRows = (await sql`
-      SELECT id, role, activo FROM usuarios WHERE celular = ${data.celular} LIMIT 1
+      SELECT id, role, activo FROM usuarios WHERE celular = ${data.celular} AND role = 'CUSTOMER' LIMIT 1
     `) as any[]
     if (customerRows.length > 0 && (customerRows[0].role !== 'CUSTOMER' || !customerRows[0].activo)) {
       return Response.json({ ok: false, error: 'Ese celular pertenece a una cuenta que no puede recibir pedidos' }, { status: 409 })
@@ -163,12 +163,12 @@ export async function POST(req: NextRequest) {
       customerRows = (await sql`
         INSERT INTO usuarios (id, role, celular, nombre)
         VALUES (${newCustomerId}, 'CUSTOMER', ${data.celular}, ${data.nombre})
-        ON CONFLICT (celular) DO NOTHING
+        ON CONFLICT DO NOTHING
         RETURNING id, role, activo
       `) as any[]
       if (customerRows.length === 0) {
         customerRows = (await sql`
-          SELECT id, role, activo FROM usuarios WHERE celular = ${data.celular} LIMIT 1
+          SELECT id, role, activo FROM usuarios WHERE celular = ${data.celular} AND role = 'CUSTOMER' LIMIT 1
         `) as any[]
       }
       if (customerRows.length === 0 || customerRows[0].role !== 'CUSTOMER' || !customerRows[0].activo) {

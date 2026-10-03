@@ -4,6 +4,7 @@ import { useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import Logo from '@/components/layout/logo'
+import PageModal from '@/components/ui/page-modal'
 
 function RegistroForm() {
   const router = useRouter()
@@ -24,8 +25,8 @@ function RegistroForm() {
       setError('El celular debe tener 9 dígitos')
       return
     }
-    if (password.length < 6) {
-      setError('La contraseña debe tener al menos 6 caracteres')
+    if (password.length < 12) {
+      setError('La contraseña debe tener al menos 12 caracteres')
       return
     }
 
@@ -69,27 +70,9 @@ function RegistroForm() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-surface-dark">
-      {/* HEADER CON LOGO */}
-      <header className="p-5">
-        <Logo size={44} linkeado />
-      </header>
-
-      <div className="flex-1 flex items-center justify-center px-5 pb-10">
-        <div className="w-full max-w-md">
-          {/* LOGO GRANDE */}
-          <div className="flex justify-center mb-6">
-            <Logo size={96} conTexto />
-          </div>
-
-          <div className="mb-8 text-center">
-            <h1 className="text-3xl font-black text-white">
-              Crea tu cuenta 🚀
-            </h1>
-            <p className="text-gray-500 mt-2">
-              Solo necesitas 3 datos para empezar a pedir
-            </p>
-          </div>
+    <PageModal title="Crea tu cuenta 🚀" description="Solo necesitas 3 datos para empezar a pedir" returnTo={redirect}>
+        <div className="mx-auto w-full max-w-md">
+          <div className="mb-5 flex justify-center"><Logo size={68} conTexto /></div>
 
           <form
             onSubmit={handleSubmit}
@@ -145,9 +128,9 @@ function RegistroForm() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                minLength={6}
+                minLength={12}
                 autoComplete="new-password"
-                placeholder="Mínimo 6 caracteres"
+                placeholder="Mínimo 12 caracteres"
                 className="w-full px-4 py-4 bg-surface-dark border border-line-light rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand/20 transition-all"
               />
             </div>
@@ -177,14 +160,13 @@ function RegistroForm() {
             </Link>
           </p>
         </div>
-      </div>
-    </div>
+    </PageModal>
   )
 }
 
 export default function RegistroPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-surface-dark" />}>
+    <Suspense fallback={<PageModal title="Crea tu cuenta 🚀" description="Solo necesitas 3 datos para empezar a pedir"><div className="mx-auto h-72 max-w-md animate-pulse rounded-2xl bg-white/5" /></PageModal>}>
       <RegistroForm />
     </Suspense>
   )

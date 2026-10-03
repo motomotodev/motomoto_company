@@ -1,20 +1,16 @@
 'use client'
 
-import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import DireccionModal, { type Direccion } from './direccion-modal'
-import {
-  guardarDireccionTemporal,
-  limpiarDireccionTemporal,
-} from '@/hooks/use-direccion-actual'
+import MapaLocalesModal, { type PuntoEntregaMapa } from '@/components/mapa/mapa-locales-modal'
+import { guardarDireccionTemporal, limpiarDireccionTemporal } from '@/hooks/use-direccion-actual'
+import type { Direccion } from './direccion-modal'
 
 interface Props {
   open: boolean
   onClose: () => void
   estaLogueado: boolean
   initialData?: Partial<Direccion>
-  onGuardada?: () => void
-  comenzarEnMapa?: boolean
+  onGuardada?: () => void | Promise<void>
   predeterminadaAlGuardar?: boolean
 }
 
@@ -24,65 +20,52 @@ export default function DireccionModalWrapper({
   estaLogueado,
   initialData,
   onGuardada,
-  comenzarEnMapa = false,
   predeterminadaAlGuardar = false,
 }: Props) {
   const router = useRouter()
-  const [loading, setLoading] = useState(false)
 
-  async function guardar(data: Direccion) {
-    setLoading(true)
-    try {
-      if (estaLogueado) {
-        // Guardar en BD
-        const isEdit = !!data.id
-        const url = isEdit ? `/api/direcciones/${data.id}` : '/api/direcciones'
+  async function guardar(direccion: PuntoEntregaMapa) {
+    const id = direccion.id || initialData?.id
+    const esPredeterminada = predeterminadaAlGuardar || Boolean(initialData?.es_predeterminada)
 
-        const res = await fetch(url, {
-          method: isEdit ? 'PATCH' : 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            etiqueta: data.etiqueta,
-            direccion: data.direccion,
-            referencia: data.referencia,
-            lat: data.lat,
-            lng: data.lng,
-            es_predeterminada: predeterminadaAlGuardar,
-          }),
-        })
-
-        const resData = await res.json()
-        if (!res.ok || !resData.ok) {
-          throw new Error(resData.error || 'Error')
-        }
-        limpiarDireccionTemporal()
-      } else {
-        // Guardar en localStorage
-        guardarDireccionTemporal({
-          etiqueta: data.etiqueta,
-          direccion: data.direccion,
-          referencia: data.referencia,
-          lat: data.lat,
-          lng: data.lng,
-          es_predeterminada: predeterminadaAlGuardar,
-        })
-      }
-
-      onClose()
-      onGuardada?.()
-      router.refresh()
-    } finally {
-      setLoading(false)
+    if (estaLogueado) {
+      const response = await fetch(id ? `/api/direcciones/${id}` : '/api/direcciones', {
+        method: id ? 'PATCH' : 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          etiqueta: direccion.etiqueta,
+          direccion: direccion.direccion,
+          referencia: direccion.referencia,
+          lat: direccion.lat,
+          lng: direccion.lng,
+          es_predeterminada: esPredeterminada,
+        }),
+      })
+      const result = await response.json()
+      if (!response.ok || !result.ok) throw new Error(result.error || 'No se pudo guardar la dirección.')
+      limpiarDireccionTemporal()
+    } else {
+      guardarDireccionTemporal({
+        etiqueta: direccion.etiqueta,
+        direccion: direccion.direccion,
+        referencia: direccion.referencia,
+        lat: direccion.lat,
+        lng: direccion.lng,
+        es_predeterminada: true,
+      })
     }
+
+    await onGuardada?.()
+    router.refresh()
   }
 
   return (
-    <DireccionModal
+    <MapaLocalesModal
       open={open}
       onClose={onClose}
-      onGuardar={guardar}
-      initialData={initialData}
-      comenzarEnMapa={comenzarEnMapa}
+      onConfirmarUbicacion={guardar}
+      direccionActual={initialData as Partial<PuntoEntregaMapa> | undefined}
+      modoEdicion={!!initialData?.id}
     />
   )
 }

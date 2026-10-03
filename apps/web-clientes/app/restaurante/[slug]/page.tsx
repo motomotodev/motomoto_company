@@ -157,6 +157,7 @@ export default async function RestaurantePage({
 
       <main className="pb-24 md:pb-8">
         <HeaderRestaurante
+          id={restaurante.id}
           nombre={restaurante.nombre}
           subtitulo={restaurante.subtitulo}
           banner_url={restaurante.banner_url}

@@ -7,6 +7,8 @@ export interface EnvioInfo {
   costo: number | null
   distancia_km: number | null
   duracion_min: number | null
+  permitido: boolean
+  razon: 'RUTA_NO_DISPONIBLE' | 'SUPERA_DISTANCIA_MAXIMA' | null
 }
 
 // ============================================================
@@ -21,7 +23,7 @@ export function useEnviosMultiples(
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    if (!lat || !lng || restauranteIds.length === 0) {
+    if (lat == null || lng == null || !Number.isFinite(lat) || !Number.isFinite(lng) || restauranteIds.length === 0) {
       setEnvios({})
       return
     }

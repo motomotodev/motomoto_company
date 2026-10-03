@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import PlatoCard, { type Plato } from './plato-card'
 import OpcionesModal from '@/components/plato/opciones-modal'
+import { usePreferenciasCliente } from '@/components/ui/preferencias-cliente'
 
 interface Subcategoria {
   id: string
@@ -36,6 +37,7 @@ export default function RestauranteMenu({
 }: Props) {
   const [platoSeleccionado, setPlatoSeleccionado] =
     useState<PlatoCompleto | null>(null)
+  const { favoritos, calificaciones, pendientes, toggleFavorito, calificar, clave } = usePreferenciasCliente()
 
   // Agrupar platos por subcategoría
   const grupos = [
@@ -84,6 +86,11 @@ export default function RestauranteMenu({
                   key={plato.id}
                   plato={plato}
                   restaurante={restaurante}
+                  esFavorito={favoritos.has(clave('plato', plato.id))}
+                  pendiente={pendientes.has(clave('plato', plato.id))}
+                  calificacion={calificaciones[clave('plato', plato.id)]}
+                  onAlternarFavorito={(source) => void toggleFavorito('plato', plato.id, source).catch((error) => window.alert(error instanceof Error ? error.message : 'No se pudo actualizar el favorito.'))}
+                  onCalificar={(estrellas) => void calificar('plato', plato.id, estrellas).catch((error) => window.alert(error instanceof Error ? error.message : 'No se pudo guardar tu calificación.'))}
                   onAbrirOpciones={(p) =>
                     setPlatoSeleccionado(
                       platos.find((x) => x.id === p.id) || null

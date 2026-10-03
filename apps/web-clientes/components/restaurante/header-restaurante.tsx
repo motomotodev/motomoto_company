@@ -1,8 +1,10 @@
 'use client'
 
 import Link from 'next/link'
+import { CalificacionEstrellas, FavoritoButton, usePreferenciasCliente } from '@/components/ui/preferencias-cliente'
 
 interface Props {
+  id: string
   nombre: string
   subtitulo: string | null
   banner_url: string | null
@@ -15,6 +17,7 @@ interface Props {
 }
 
 export default function HeaderRestaurante({
+  id,
   nombre,
   subtitulo,
   banner_url,
@@ -25,6 +28,8 @@ export default function HeaderRestaurante({
   horarioHoy,
   direccion,
 }: Props) {
+  const { favoritos, calificaciones, pendientes, toggleFavorito, calificar, clave } = usePreferenciasCliente()
+  const key = clave('restaurante', id)
   return (
     <div className="relative">
       {/* BANNER */}
@@ -72,10 +77,11 @@ export default function HeaderRestaurante({
             </div>
 
             {/* INFO */}
-            <div className="flex-1 min-w-0">
-              <h1 className="text-xl md:text-3xl font-black text-white leading-tight">
-                {nombre}
-              </h1>
+            <div className="min-w-0 flex-1">
+              <div className="flex items-start justify-between gap-2">
+                <h1 className="text-xl font-black leading-tight text-white md:text-3xl">{nombre}</h1>
+                <FavoritoButton active={favoritos.has(key)} pending={pendientes.has(key)} onClick={(source) => void toggleFavorito('restaurante', id, source).catch((error) => window.alert(error instanceof Error ? error.message : 'No se pudo actualizar el favorito.'))} />
+              </div>
               {subtitulo && (
                 <p className="text-sm text-gray-400 mt-0.5">{subtitulo}</p>
               )}
@@ -98,6 +104,7 @@ export default function HeaderRestaurante({
                   </span>
                 )}
               </div>
+              <div className="mt-3"><CalificacionEstrellas rating={calificaciones[key]} pending={pendientes.has(key)} onRate={(estrellas) => void calificar('restaurante', id, estrellas).catch((error) => window.alert(error instanceof Error ? error.message : 'No se pudo guardar tu calificación.'))} /></div>
             </div>
           </div>
 

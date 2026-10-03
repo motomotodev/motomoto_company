@@ -78,9 +78,9 @@ export async function POST(req: NextRequest) {
 
     const d = parsed.data
 
-    // Verificar celular único
+    // El teléfono debe ser único entre drivers; puede coincidir con el de un cliente.
     const exists = await sql`
-      SELECT id FROM usuarios WHERE celular = ${d.celular} LIMIT 1
+      SELECT id FROM usuarios WHERE celular = ${d.celular} AND role = 'DRIVER' LIMIT 1
     `
     if (exists.length > 0) {
       return Response.json(

@@ -57,8 +57,10 @@ export const viewport: Viewport = {
 
 export default function RootLayout({
   children,
+  modal,
 }: Readonly<{
   children: React.ReactNode
+  modal: React.ReactNode
 }>) {
   return (
     <html lang="es">
@@ -70,7 +72,7 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-title" content="MotoMoto" />
       </head>
       <body className="antialiased min-h-screen">
-        <ToastProvider>{children}</ToastProvider>
+        <ToastProvider>{children}{modal}</ToastProvider>
       </body>
     </html>
   )

@@ -2,6 +2,7 @@
 
 import { useCarrito } from '@/lib/carrito/store'
 import { useToast } from '@/components/ui/toast'
+import { CalificacionEstrellas, FavoritoButton, type CalificacionResumen } from '@/components/ui/preferencias-cliente'
 
 export interface Plato {
   id: string
@@ -23,9 +24,14 @@ interface Props {
     nombre: string
   }
   onAbrirOpciones: (plato: Plato) => void
+  esFavorito: boolean
+  pendiente: boolean
+  calificacion?: CalificacionResumen
+  onAlternarFavorito: (source: HTMLElement) => void
+  onCalificar: (estrellas: number) => void
 }
 
-export default function PlatoCard({ plato, restaurante, onAbrirOpciones }: Props) {
+export default function PlatoCard({ plato, restaurante, onAbrirOpciones, esFavorito, pendiente, calificacion, onAlternarFavorito, onCalificar }: Props) {
   const agregar = useCarrito((s) => s.agregar)
   const items = useCarrito((s) => s.items)
   const { toast } = useToast()
@@ -96,15 +102,18 @@ export default function PlatoCard({ plato, restaurante, onAbrirOpciones }: Props
 
         {/* INFO */}
         <div className="flex-1 p-3 flex flex-col min-w-0">
-          <h3 className="text-sm font-bold text-white leading-tight line-clamp-2 mb-1">
-            {plato.nombre}
-          </h3>
+          <div className="mb-1 flex items-start justify-between gap-2">
+            <h3 className="line-clamp-2 text-sm font-bold leading-tight text-white">{plato.nombre}</h3>
+            <FavoritoButton compact active={esFavorito} pending={pendiente} onClick={onAlternarFavorito} />
+          </div>
 
           {plato.descripcion && (
             <p className="text-[11px] text-gray-500 line-clamp-2 mb-2">
               {plato.descripcion}
             </p>
           )}
+
+          <CalificacionEstrellas compact rating={calificacion} pending={pendiente} onRate={onCalificar} />
 
           <div className="flex flex-wrap items-center gap-1.5 mt-auto mb-2">
             {plato.tiempo_estimado && (

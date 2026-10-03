@@ -166,7 +166,7 @@ export default function HeaderSearch() {
       <form onSubmit={(event) => { event.preventDefault(); buscar() }} className={`relative z-40 hidden min-w-0 flex-1 md:block ${open ? 'md:z-[60]' : ''}`}>
         <div className={`flex h-12 items-center gap-3 rounded-full border bg-black/45 px-4 transition ${open ? 'border-white/45 bg-black/80' : 'border-white/15 hover:border-white/30'}`}>
           <span className="text-xl leading-none text-white/80">⌕</span>
-          <input ref={desktopInput} value={query} onFocus={() => setOpen(true)} onChange={(e) => setQuery(e.target.value)} placeholder="Busca un local o un plato…" aria-label="Buscar locales y platos" aria-expanded={open} className="h-full min-w-0 flex-1 bg-transparent text-sm font-semibold text-white outline-none placeholder:text-white/55" autoComplete="off" />
+          <input ref={desktopInput} value={query} onFocus={() => setOpen(true)} onChange={(e) => setQuery(e.target.value)} placeholder="Prueba ‘sushi’…" aria-label="Buscar locales y platos" aria-expanded={open} className="h-full min-w-0 flex-1 bg-transparent text-sm font-semibold text-white outline-none placeholder:text-white/55" autoComplete="off" />
           {query ? <button type="button" onClick={() => setQuery('')} aria-label="Limpiar búsqueda" className="text-white/60 hover:text-white">✕</button> : <kbd className="rounded-md border border-white/20 px-2 py-0.5 font-mono text-[10px] text-white/50">/</kbd>}
         </div>
         {open && <div className="absolute left-0 right-0 top-[calc(100%+10px)] max-h-[min(66dvh,480px)] overflow-y-auto rounded-[24px] border border-white/15 bg-[#090a0d]/95 shadow-2xl shadow-black/60 backdrop-blur-2xl"><SearchPanel {...props} /></div>}
@@ -176,7 +176,7 @@ export default function HeaderSearch() {
       {mobileOpen && <div className="fixed inset-0 z-[80] flex flex-col bg-black/85 p-3 pt-[max(12px,env(safe-area-inset-top))] backdrop-blur-2xl md:hidden">
         <form onSubmit={(event) => { event.preventDefault(); buscar() }} className="flex h-12 shrink-0 items-center gap-3 rounded-full border border-white/25 bg-black/65 px-4">
           <button type="button" onClick={() => setMobileOpen(false)} aria-label="Volver" className="text-xl text-white/70">←</button>
-          <input ref={mobileInput} value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Busca un local o un plato…" aria-label="Buscar locales y platos" className="h-full min-w-0 flex-1 bg-transparent text-sm font-semibold text-white outline-none placeholder:text-white/50" autoComplete="off" />
+          <input ref={mobileInput} value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Prueba ‘sushi’…" aria-label="Buscar locales y platos" className="h-full min-w-0 flex-1 bg-transparent text-sm font-semibold text-white outline-none placeholder:text-white/50" autoComplete="off" />
           {query && <button type="button" onClick={() => setQuery('')} aria-label="Limpiar búsqueda" className="text-white/60">✕</button>}
         </form>
         <div className="mt-3 min-h-0 flex-1 overflow-y-auto rounded-[24px] border border-white/10 bg-[#090a0d]/90"><SearchPanel {...props} /></div>

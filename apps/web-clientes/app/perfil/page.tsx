@@ -4,11 +4,10 @@ export const metadata: Metadata = {
   title: 'Mi perfil · MotoMoto',
   description: 'Gestiona tu cuenta',
 }
-import { sql } from '@/lib/db'
 import { getSessionUser } from '@/lib/auth'
-import Header from '@/components/layout/header'
-import BottomNav from '@/components/layout/bottom-nav'
 import PerfilCliente from '@/components/perfil/perfil-cliente'
+import PageModal from '@/components/ui/page-modal'
+import Link from 'next/link'
 
 export const dynamic = 'force-dynamic'
 
@@ -17,42 +16,26 @@ export default async function PerfilPage() {
 
   if (!user) {
     return (
-      <>
-        <Header user={null} />
-        <main className="max-w-3xl mx-auto px-4 py-5 pb-24 md:pb-8 text-center">
+      <PageModal title="Mi perfil" description="Gestiona tu cuenta" returnTo="/">
+        <main className="mx-auto max-w-3xl py-8 text-center">
           <p className="text-4xl mb-3">🔒</p>
           <h1 className="text-xl font-bold text-white mb-2">
             Inicia sesión para ver tu perfil
           </h1>
-          <a
+          <Link
             href="/login?redirect=/perfil"
             className="inline-block bg-brand hover:bg-brand-dark text-black font-bold px-6 py-3 rounded-xl transition-colors mt-3"
           >
             Ingresar
-          </a>
+          </Link>
         </main>
-        <BottomNav />
-      </>
+      </PageModal>
     )
   }
 
-  // Dirección para el header
-  const dirRows = (await sql`
-    SELECT id, etiqueta, direccion, referencia, lat, lng
-    FROM direcciones
-    WHERE usuario_id = ${user.id} AND es_predeterminada = TRUE
-    LIMIT 1
-  `) as any[]
-
-  const direccionDeBD = dirRows[0] || null
-
   return (
-    <>
-      <Header user={user} direccionDeBD={direccionDeBD} />
-
-      <main className="max-w-3xl mx-auto px-4 py-5 pb-24 md:pb-8">
-        <h1 className="text-2xl font-black text-white mb-5">Mi perfil 👤</h1>
-
+    <PageModal title="Mi perfil 👤" description="Tus datos y preferencias" returnTo="/">
+      <main className="mx-auto max-w-3xl">
         <PerfilCliente
           user={{
             nombre: user.nombre,
@@ -60,8 +43,6 @@ export default async function PerfilPage() {
           }}
         />
       </main>
-
-      <BottomNav />
-    </>
+    </PageModal>
   )
 }

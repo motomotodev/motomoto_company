@@ -98,7 +98,7 @@ export async function getSessionUser(): Promise<SessionUser | null> {
 }
 
 export async function registrarCliente(celular: string, nombre: string, password: string): Promise<{ ok: true; user: SessionUser } | { ok: false; error: string }> {
-  const existe = (await sql`SELECT id FROM usuarios WHERE celular = ${celular} LIMIT 1`) as any[]
+  const existe = (await sql`SELECT id FROM usuarios WHERE celular = ${celular} AND role = 'CUSTOMER' LIMIT 1`) as any[]
   if (existe.length > 0) return { ok: false, error: 'Este celular ya está registrado' }
   const passwordHash = await hashPassword(password)
   const rows = (await sql`

@@ -35,22 +35,24 @@ export default function UserMenu({
     router.push('/')
   }
 
-  const inicial = nombre.charAt(0).toUpperCase()
-
   return (
     <div className="relative" ref={menuRef}>
       <button
         type="button"
         onClick={() => setOpen(!open)}
-        className="flex h-10 w-10 items-center justify-center rounded-full bg-[#ff7628]/15 font-bold text-[#ff8c45] transition-colors hover:bg-[#ff7628]/25"
+        aria-label={`Menú de cuenta de ${nombre}`}
+        data-favorites-target
+        className="motomoto-greeting motomoto-display flex max-w-[148px] shrink-0 items-center gap-2 rounded-full border border-orange-200/35 bg-gradient-to-r from-orange-500/20 to-black/35 py-1.5 pl-1.5 pr-3 text-left text-white shadow-[0_4px_18px_rgba(255,118,40,.12)] transition hover:border-orange-200/70 hover:bg-orange-500/25 md:max-w-[190px] md:gap-2.5 md:py-2 md:pl-2 md:pr-4"
       >
-        {inicial}
+        <span className="motomoto-greeting-avatar grid h-7 w-7 shrink-0 place-items-center rounded-full bg-[#ff7628] text-sm shadow-md md:h-8 md:w-8" aria-hidden="true">👋</span>
+        <span className="min-w-0"><span className="block text-[9px] font-bold uppercase tracking-[.12em] text-orange-200/85 md:text-[10px]">Hola</span><span className="block truncate text-[11px] font-black italic md:text-xs">{nombre.trim().split(/\s+/)[0]}</span></span>
+        <span aria-hidden="true" className="text-[9px] text-white/70">⌄</span>
       </button>
 
       {open && (
-        <div className="absolute right-0 top-12 w-64 bg-surface border border-line rounded-2xl shadow-2xl overflow-hidden z-50">
+        <div className="absolute right-0 top-12 z-50 w-64 overflow-hidden rounded-2xl border border-white/15 bg-[#101114]/95 shadow-2xl backdrop-blur-2xl">
           {/* Info del usuario */}
-          <div className="p-4 border-b border-line">
+          <div className="border-b border-white/10 p-4">
             <p className="text-sm font-bold text-white truncate">{nombre}</p>
             <p className="text-xs text-gray-500">+51 {celular}</p>
           </div>
@@ -60,7 +62,7 @@ export default function UserMenu({
             <Link
               href="/perfil"
               onClick={() => setOpen(false)}
-              className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-gray-300 hover:bg-surface-light transition-colors"
+              className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-gray-300 transition-colors hover:bg-white/10"
             >
               <span>👤</span>
               <span>Mi perfil</span>
@@ -68,20 +70,28 @@ export default function UserMenu({
             <Link
               href="/mis-pedidos"
               onClick={() => setOpen(false)}
-              className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-gray-300 hover:bg-surface-light transition-colors"
+              className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-gray-300 transition-colors hover:bg-white/10"
             >
               <span>📦</span>
               <span>Mis pedidos</span>
             </Link>
+            <Link
+              href="/favoritos"
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-gray-300 transition-colors hover:bg-white/10"
+            >
+              <span className="text-pink-300">♥</span>
+              <span>Mis favoritos</span>
+            </Link>
           </div>
 
           {/* Logout */}
-          <div className="p-2 border-t border-line">
+          <div className="border-t border-white/10 p-2">
             <button
               type="button"
               onClick={logout}
               disabled={loading}
-              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-danger hover:bg-danger/10 transition-colors disabled:opacity-50"
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-red-300 transition-colors hover:bg-red-500/10 disabled:opacity-50"
             >
               <span>🚪</span>
               <span>{loading ? 'Cerrando...' : 'Cerrar sesión'}</span>

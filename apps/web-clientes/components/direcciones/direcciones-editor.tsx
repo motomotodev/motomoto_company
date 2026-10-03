@@ -285,6 +285,11 @@ export default function DireccionesEditor({
         onClose={() => setModalOpen(false)}
         estaLogueado={true}
         initialData={editando ?? undefined}
+        onGuardada={async () => {
+          const response = await fetch('/api/direcciones')
+          const result = await response.json()
+          if (result.ok) setDirecciones(result.data)
+        }}
       />
     </div>
   )

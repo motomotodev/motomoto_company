@@ -4,6 +4,7 @@ import { useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import Logo from '@/components/layout/logo'
+import PageModal from '@/components/ui/page-modal'
 
 function LoginForm() {
   const router = useRouter()
@@ -43,28 +44,9 @@ function LoginForm() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-surface-dark">
-      {/* HEADER CON LOGO */}
-      <header className="p-5">
-        <Logo size={44} linkeado />
-      </header>
-
-      {/* FORM */}
-      <div className="flex-1 flex items-center justify-center px-5 pb-10">
-        <div className="w-full max-w-md">
-          {/* LOGO GRANDE */}
-          <div className="flex justify-center mb-6">
-            <Logo size={96} conTexto />
-          </div>
-
-          <div className="mb-8 text-center">
-            <h1 className="text-3xl font-black text-white">
-              Bienvenido de vuelta 👋
-            </h1>
-            <p className="text-gray-500 mt-2">
-              Ingresa con tu celular para continuar
-            </p>
-          </div>
+    <PageModal title="Bienvenido de vuelta 👋" description="Ingresa con tu celular para continuar" returnTo={redirect}>
+        <div className="mx-auto w-full max-w-md">
+          <div className="mb-5 flex justify-center"><Logo size={68} conTexto /></div>
 
           <form
             onSubmit={handleSubmit}
@@ -141,14 +123,13 @@ function LoginForm() {
             </Link>
           </p>
         </div>
-      </div>
-    </div>
+    </PageModal>
   )
 }
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-surface-dark" />}>
+    <Suspense fallback={<PageModal title="Bienvenido de vuelta 👋" description="Ingresa con tu celular para continuar"><div className="mx-auto h-72 max-w-md animate-pulse rounded-2xl bg-white/5" /></PageModal>}>
       <LoginForm />
     </Suspense>
   )
