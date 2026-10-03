@@ -1,5 +1,30 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: "MotoMoto Sharpie";
+  src: url("/fonts/Sharpie-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "MotoMoto Sharpie";
+  src: url("/fonts/Sharpie-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: "MotoMoto Sharpie";
+  src: url("/fonts/Sharpie-Extrabold.woff2") format("woff2");
+  font-weight: 800;
+  font-display: swap;
+}
+@font-face {
+  font-family: "MotoMoto Sharpie";
+  src: url("/fonts/Sharpie-Black.woff2") format("woff2");
+  font-weight: 900;
+  font-display: swap;
+}
+
 @theme {
   /* ============================================
      PALETA MOTOMOTO (basada en el logo)
@@ -41,6 +66,40 @@ body {
   background-color: var(--color-surface-dark);
   color: #fff;
   overscroll-behavior-y: none;
+}
+
+.motomoto-display {
+  font-family: "MotoMoto Sharpie", ui-sans-serif, system-ui, sans-serif;
+}
+
+.motomoto-map-tiles {
+  filter: grayscale(1) brightness(.82) contrast(1.12);
+}
+
+.mm-store-pin,
+.mm-delivery-pin {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border: 2px solid #fff;
+  border-radius: 50% 50% 50% 0;
+  background: linear-gradient(140deg, #3158ef, #172da4);
+  box-shadow: 0 7px 16px #0009;
+  transform: rotate(-45deg);
+  animation: motomoto-pin-in .35s ease both;
+}
+.mm-store-pin i,
+.mm-delivery-pin i {
+  font-style: normal;
+  font-size: 19px;
+  transform: rotate(45deg);
+}
+.mm-store-pin.is-active { background: linear-gradient(140deg, #ff913f, #e54d0b); }
+.mm-delivery-pin { background: linear-gradient(140deg, #ff913f, #e54d0b); }
+@keyframes motomoto-pin-in {
+  from { opacity: 0; transform: translateY(-12px) rotate(-45deg) scale(.65); }
+  to { opacity: 1; transform: rotate(-45deg) scale(1); }
 }
 
 .motomoto-logo-mark {

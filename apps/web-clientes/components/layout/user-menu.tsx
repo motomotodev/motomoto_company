@@ -42,7 +42,7 @@ export default function UserMenu({
       <button
         type="button"
         onClick={() => setOpen(!open)}
-        className="w-10 h-10 rounded-full bg-brand/20 hover:bg-brand/30 flex items-center justify-center text-brand font-bold transition-colors"
+        className="flex h-10 w-10 items-center justify-center rounded-full bg-[#ff7628]/15 font-bold text-[#ff8c45] transition-colors hover:bg-[#ff7628]/25"
       >
         {inicial}
       </button>

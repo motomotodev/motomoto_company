@@ -6,8 +6,21 @@ interface Config {
   tarifa_delivery_metodo: 'DETALLADA' | 'GENERAL'
   costo_vip: number
   tiempo_max_aceptacion: number
+  redes_sociales: Record<RedSocial, string>
   actualizado_en: string
 }
+
+type RedSocial = 'instagram' | 'tiktok' | 'facebook' | 'whatsapp' | 'youtube' | 'telegram' | 'x'
+
+const REDES: { key: RedSocial; label: string; placeholder: string }[] = [
+  { key: 'instagram', label: 'Instagram', placeholder: 'https://instagram.com/tu-cuenta' },
+  { key: 'tiktok', label: 'TikTok', placeholder: 'https://tiktok.com/@tu-cuenta' },
+  { key: 'facebook', label: 'Facebook', placeholder: 'https://facebook.com/tu-pagina' },
+  { key: 'whatsapp', label: 'WhatsApp', placeholder: 'https://wa.me/519XXXXXXXX' },
+  { key: 'youtube', label: 'YouTube', placeholder: 'https://youtube.com/@tu-canal' },
+  { key: 'telegram', label: 'Telegram', placeholder: 'https://t.me/tu-cuenta' },
+  { key: 'x', label: 'X', placeholder: 'https://x.com/tu-cuenta' },
+]
 
 export default function ConfiguracionForm() {
   const [config, setConfig] = useState<Config | null>(null)
@@ -25,6 +38,9 @@ export default function ConfiguracionForm() {
             tarifa_delivery_metodo: data.data.tarifa_delivery_metodo,
             costo_vip: Number(data.data.costo_vip),
             tiempo_max_aceptacion: Number(data.data.tiempo_max_aceptacion),
+            redes_sociales: Object.fromEntries(
+              REDES.map(({ key }) => [key, data.data.redes_sociales?.[key] ?? ''])
+            ) as Record<RedSocial, string>,
             actualizado_en: data.data.actualizado_en,
           })
         }
@@ -83,6 +99,30 @@ export default function ConfiguracionForm() {
             <span><strong className="block text-sm text-white">Tabla MotoMoto general</strong><small className="text-gray-500">Usa los rangos de la segunda tabla (hasta 12 km); continúa el patrón de S/ 0.50 cada 0.5 km hasta 15 km.</small></span>
           </label>
         </fieldset>
+      </div>
+
+      <div className="bg-surface border border-line rounded-2xl p-5 md:p-6 space-y-4">
+        <div>
+          <h3 className="text-base font-bold text-white">Redes sociales</h3>
+          <p className="text-xs text-gray-500 mt-1">
+            Agrega los enlaces públicos de MotoMoto. Solo aparecerán en la tienda los que tengan una URL.
+          </p>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-2">
+          {REDES.map(({ key, label, placeholder }) => (
+            <div key={key}>
+              <label htmlFor={`red-${key}`} className="mb-1.5 block text-xs font-medium uppercase tracking-wide text-gray-400">{label}</label>
+              <input
+                id={`red-${key}`}
+                type="url"
+                value={config.redes_sociales[key]}
+                onChange={(e) => update('redes_sociales', { ...config.redes_sociales, [key]: e.target.value })}
+                placeholder={placeholder}
+                className="w-full rounded-xl border border-line-light bg-surface-dark px-4 py-3 text-sm text-white placeholder-gray-600 focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/20"
+              />
+            </div>
+          ))}
+        </div>
       </div>
 
       <div className="bg-surface border border-line rounded-2xl p-5 md:p-6 space-y-4">

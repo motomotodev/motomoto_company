@@ -14,6 +14,8 @@ interface Props {
   estaLogueado: boolean
   initialData?: Partial<Direccion>
   onGuardada?: () => void
+  comenzarEnMapa?: boolean
+  predeterminadaAlGuardar?: boolean
 }
 
 export default function DireccionModalWrapper({
@@ -22,6 +24,8 @@ export default function DireccionModalWrapper({
   estaLogueado,
   initialData,
   onGuardada,
+  comenzarEnMapa = false,
+  predeterminadaAlGuardar = false,
 }: Props) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
@@ -43,6 +47,7 @@ export default function DireccionModalWrapper({
             referencia: data.referencia,
             lat: data.lat,
             lng: data.lng,
+            es_predeterminada: predeterminadaAlGuardar,
           }),
         })
 
@@ -59,6 +64,7 @@ export default function DireccionModalWrapper({
           referencia: data.referencia,
           lat: data.lat,
           lng: data.lng,
+          es_predeterminada: predeterminadaAlGuardar,
         })
       }
 
@@ -76,6 +82,7 @@ export default function DireccionModalWrapper({
       onClose={onClose}
       onGuardar={guardar}
       initialData={initialData}
+      comenzarEnMapa={comenzarEnMapa}
     />
   )
 }

@@ -78,16 +78,16 @@ export default function BuscarCliente() {
   return (
     <div>
       {/* BUSCADOR */}
-      <div className="sticky top-[57px] z-20 bg-surface-dark/95 backdrop-blur-lg -mx-4 px-4 py-3 border-b border-line mb-4">
-        <div className="flex items-center bg-surface border border-brand/40 rounded-xl px-3.5">
-          <span className="text-brand mr-2 text-base">🔍</span>
+      <div className="sticky top-[57px] z-20 -mx-4 mb-4 border-b border-white/10 bg-black/75 px-4 py-3 backdrop-blur-xl">
+        <div className="flex items-center rounded-full border border-white/15 bg-black/55 px-4 transition focus-within:border-white/35">
+          <span className="mr-2 text-base text-white/75">⌕</span>
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             autoFocus
             placeholder="Busca locales, platos y productos..."
-            className="flex-1 bg-transparent py-3 text-white placeholder-gray-600 focus:outline-none text-sm"
+            className="flex-1 bg-transparent py-3 text-sm text-white placeholder-white/45 focus:outline-none"
           />
           {query && (
             <button

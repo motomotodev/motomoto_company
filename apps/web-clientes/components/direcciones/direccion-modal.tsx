@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import MapaSelector from './mapa-selector'
 
 export interface Direccion {
@@ -18,6 +18,7 @@ interface Props {
   onClose: () => void
   onGuardar: (direccion: Direccion) => Promise<void>
   initialData?: Partial<Direccion>
+  comenzarEnMapa?: boolean
 }
 
 const PUCALLPA_CENTRO = { lat: -8.3791, lng: -74.5539 }
@@ -27,13 +28,11 @@ export default function DireccionModal({
   onClose,
   onGuardar,
   initialData,
+  comenzarEnMapa = false,
 }: Props) {
-  const [paso, setPaso] = useState<'elegir' | 'mapa'>('elegir')
+  const [paso, setPaso] = useState<'elegir' | 'mapa'>(comenzarEnMapa ? 'mapa' : 'elegir')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const reverseLookupTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const reverseLookupId = useRef(0)
-
   const [lat, setLat] = useState(initialData?.lat ?? PUCALLPA_CENTRO.lat)
   const [lng, setLng] = useState(initialData?.lng ?? PUCALLPA_CENTRO.lng)
   const [etiqueta, setEtiqueta] = useState(initialData?.etiqueta ?? 'Casa')
@@ -44,7 +43,7 @@ export default function DireccionModal({
 
   useEffect(() => {
     if (open) {
-      setPaso('elegir')
+      setPaso(comenzarEnMapa ? 'mapa' : 'elegir')
       setError(null)
       setLoading(false)
       setLat(initialData?.lat ?? PUCALLPA_CENTRO.lat)
@@ -53,7 +52,7 @@ export default function DireccionModal({
       setReferencia(initialData?.referencia ?? '')
       setDireccionTexto(initialData?.direccion ?? '')
     }
-  }, [open, initialData])
+  }, [open, initialData, comenzarEnMapa])
 
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : ''
@@ -61,29 +60,6 @@ export default function DireccionModal({
       document.body.style.overflow = ''
     }
   }, [open])
-
-  useEffect(() => () => {
-    if (reverseLookupTimer.current) clearTimeout(reverseLookupTimer.current)
-    reverseLookupId.current += 1
-  }, [])
-
-  function queueReverseLookup(latitude: number, longitude: number) {
-    if (reverseLookupTimer.current) clearTimeout(reverseLookupTimer.current)
-    const lookupId = ++reverseLookupId.current
-    reverseLookupTimer.current = setTimeout(async () => {
-      try {
-        const response = await fetch(
-          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&accept-language=es`
-        )
-        const data = await response.json()
-        if (lookupId === reverseLookupId.current && data.display_name) {
-          setDireccionTexto(data.display_name.split(',').slice(0, 4).join(', '))
-        }
-      } catch {
-        // El usuario puede escribir o corregir la dirección manualmente.
-      }
-    }, 1200)
-  }
 
   if (!open) return null
 
@@ -103,22 +79,9 @@ export default function DireccionModal({
         setLat(latitude)
         setLng(longitude)
 
-        try {
-          const res = await fetch(
-            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&accept-language=es`
-          )
-          const data = await res.json()
-          const dir =
-            data.display_name?.split(',').slice(0, 4).join(', ') ||
-            'Ubicación actual'
-          setDireccionTexto(dir)
-          setPaso('mapa')
-        } catch {
-          setDireccionTexto('Ubicación actual')
-          setPaso('mapa')
-        } finally {
-          setLoading(false)
-        }
+        setDireccionTexto('')
+        setPaso('mapa')
+        setLoading(false)
       },
       () => {
         setError(
@@ -267,7 +230,6 @@ export default function DireccionModal({
                 onChange={(newLat, newLng) => {
                   setLat(newLat)
                   setLng(newLng)
-                  queueReverseLookup(newLat, newLng)
                 }}
               />
 
@@ -279,12 +241,13 @@ export default function DireccionModal({
                   type="text"
                   value={direccionTexto}
                   onChange={(e) => setDireccionTexto(e.target.value)}
-                  placeholder="Jr. Raimondi 123, Pucallpa"
+                  placeholder="Escribe tu dirección, distrito o punto de referencia"
                   className="w-full px-4 py-3 bg-surface-dark border border-line-light rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-brand"
                 />
               </div>
 
               <div>
+                <p className="mb-2 text-[11px] text-gray-500">La dirección se escribe aquí; el pin guarda las coordenadas exactas que seleccionaste.</p>
                 <label className="block text-xs font-medium text-gray-400 mb-2 uppercase tracking-wide">
                   Referencia (opcional)
                 </label>
