@@ -3,6 +3,7 @@
   "globalEnv": [
     "DATABASE_URL",
     "AUTH_SECRET",
+    "APP_ALLOWED_ORIGINS",
     "CLIENTES_API_URL",
     "ADMIN_API_URL",
     "ORS_API_KEY",
@@ -28,6 +29,7 @@
       "env": [
         "DATABASE_URL",
         "AUTH_SECRET",
+        "APP_ALLOWED_ORIGINS",
         "CLIENTES_API_URL",
         "ADMIN_API_URL",
         "ORS_API_KEY",
