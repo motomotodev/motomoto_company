@@ -17,6 +17,7 @@ export function proxy(req: NextRequest) {
     "img-src 'self' data: blob: https:",
     "font-src 'self' data: https:",
     "connect-src 'self' https: wss:",
+    "media-src 'self' blob: https:",
     "worker-src 'self' blob:",
     "object-src 'none'",
     "base-uri 'self'",
