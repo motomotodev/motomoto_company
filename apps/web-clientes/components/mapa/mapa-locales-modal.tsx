@@ -312,10 +312,11 @@ export default function MapaLocalesModal({ open, onClose, onConfirmarUbicacion, 
 
   useEffect(() => {
     if (!open) return
+    const overflowAnterior = document.body.style.overflow
     document.body.style.overflow = 'hidden'
     const onKeyDown = (e: KeyboardEvent) => e.key === 'Escape' && onClose()
     window.addEventListener('keydown', onKeyDown)
-    return () => { document.body.style.overflow = ''; window.removeEventListener('keydown', onKeyDown) }
+    return () => { document.body.style.overflow = overflowAnterior; window.removeEventListener('keydown', onKeyDown) }
   }, [open, onClose])
 
   if (!open) return null

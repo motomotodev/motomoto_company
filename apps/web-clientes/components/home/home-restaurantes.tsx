@@ -1,17 +1,40 @@
 'use client'
 
-import Link from 'next/link'
 import { useMemo, useState } from 'react'
 import type { CSSProperties } from 'react'
 import { useEnviosMultiples } from '@/hooks/use-envio'
 import { useDireccionActual, type DireccionLocal } from '@/hooks/use-direccion-actual'
 import { ABRIR_DIRECCION_EVENT } from '@/lib/direccion-events'
 import { FavoritoButton, usePreferenciasCliente } from '@/components/ui/preferencias-cliente'
+import RestaurantShowcase from './restaurant-showcase'
+import type { EnvioInfo } from '@/hooks/use-envio'
+import PedidoModal from '@/components/carrito/pedido-modal'
 
 export interface CategoriaRestaurante {
   slug: string
   nombre: string
   emoji: string | null
+}
+
+export interface PlatoHome {
+  id: string
+  restaurante_id: string
+  nombre: string
+  descripcion: string | null
+  precio: string
+  imagen_url: string | null
+  tiempo_estimado: number | null
+  disponible: boolean
+  subcategoria_id: string | null
+  subcategoria_nombre: string | null
+  grupos: {
+    id: string
+    titulo: string
+    requerido: boolean
+    minimo: number
+    maximo: number
+    choices: { id: string; nombre: string; precio_extra: string }[]
+  }[]
 }
 
 export interface RestauranteHome {
@@ -30,11 +53,14 @@ export interface RestauranteHome {
   lng: string | number | null
   abierto: boolean
   categorias: CategoriaRestaurante[]
+  platos: PlatoHome[]
 }
 
 interface Props {
   restaurantes: RestauranteHome[]
   direccionDeBD: DireccionLocal | null
+  estaLogueado: boolean
+  costoVip: number
 }
 
 type Orden = 'calificados' | 'rapidos' | 'envio' | 'cercanos'
@@ -63,13 +89,15 @@ function minutos(tiempo: string | null) {
   return n ? Number(n) : Number.POSITIVE_INFINITY
 }
 
-export default function HomeRestaurantes({ restaurantes, direccionDeBD }: Props) {
+export default function HomeRestaurantes({ restaurantes, direccionDeBD, estaLogueado, costoVip }: Props) {
   const direccion = useDireccionActual(direccionDeBD)
   const lat = valorNumerico(direccion?.lat)
   const lng = valorNumerico(direccion?.lng)
   const [categoria, setCategoria] = useState<string | null>(null)
   const [orden, setOrden] = useState<Orden>('calificados')
-  const { favoritos, pendientes, toggleFavorito, clave } = usePreferenciasCliente()
+  const [pedidoAbierto, setPedidoAbierto] = useState(false)
+  const preferencias = usePreferenciasCliente()
+  const { favoritos, pendientes, toggleFavorito, clave } = preferencias
 
   const ids = useMemo(() => restaurantes.map((r) => r.id), [restaurantes])
   const { envios, loading } = useEnviosMultiples(ids, lat, lng)
@@ -81,6 +109,9 @@ export default function HomeRestaurantes({ restaurantes, direccionDeBD }: Props)
     }))
     return [...porSlug.values()].sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'))
   }, [restaurantes])
+
+  const [categoriaShowcase, setCategoriaShowcase] = useState<string | null>(() => categorias[0]?.slug || null)
+  const [restauranteShowcase, setRestauranteShowcase] = useState('')
 
   const filtrados = useMemo(() => {
     const rows = restaurantes.filter((r) => !categoria || r.categorias.some((c) => c.slug === categoria))
@@ -97,6 +128,19 @@ export default function HomeRestaurantes({ restaurantes, direccionDeBD }: Props)
     if ((seleccion === 'envio' || seleccion === 'cercanos') && (lat == null || lng == null)) {
       window.dispatchEvent(new Event(ABRIR_DIRECCION_EVENT))
     }
+  }
+
+  const cambiarCategoriaShowcase = (slug: string | null) => {
+    setCategoriaShowcase(slug)
+    const primero = restaurantes.find((r) => !slug || r.categorias.some((c) => c.slug === slug))
+    setRestauranteShowcase(primero?.id || '')
+  }
+
+  const mostrarCartaEnInicio = (restaurante: RestauranteHome) => {
+    const slug = restaurante.categorias[0]?.slug || null
+    setCategoriaShowcase(slug)
+    setRestauranteShowcase(restaurante.id)
+    document.getElementById('locales')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
 
   const textoEnvio = (restaurante: RestauranteHome) => {
@@ -119,7 +163,21 @@ export default function HomeRestaurantes({ restaurantes, direccionDeBD }: Props)
         </filter>
       </svg>
 
-      <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
+      <RestaurantShowcase
+        restaurantes={restaurantes}
+        categorias={categorias}
+        envios={envios}
+        categoriaActiva={categoriaShowcase}
+        restauranteActivoId={restauranteShowcase}
+        onCambiarCategoria={cambiarCategoriaShowcase}
+        onCambiarRestaurante={setRestauranteShowcase}
+        preferencias={preferencias}
+        onOpenOrder={() => setPedidoAbierto(true)}
+      />
+
+      <PedidoModal open={pedidoAbierto} onClose={() => setPedidoAbierto(false)} estaLogueado={estaLogueado} direccionDeBD={direccionDeBD} restaurantes={restaurantes} costoVip={costoVip} />
+
+      <div className="mb-5 mt-12 flex flex-wrap items-end justify-between gap-3">
         <div>
           <span className="motomoto-display inline-block rounded-full bg-brand/90 px-3 py-1 text-[10px] font-black uppercase tracking-[.18em] text-white shadow-lg shadow-brand/30">Explora</span>
           <h1 className="motomoto-display mt-2 text-3xl font-black uppercase leading-none text-white drop-shadow-lg sm:text-4xl md:text-5xl">Todos los <span className="text-brand-light">restaurantes</span></h1>
@@ -160,7 +218,7 @@ export default function HomeRestaurantes({ restaurantes, direccionDeBD }: Props)
               <span className="mm-restaurant-paint" aria-hidden="true" />
               <div className="absolute left-3 top-3 z-10"><FavoritoButton compact active={favoritos.has(clave('restaurante', r.id))} pending={pendientes.has(clave('restaurante', r.id))} onClick={(source) => void toggleFavorito('restaurante', r.id, source).catch((error) => window.alert(error instanceof Error ? error.message : 'No se pudo actualizar el favorito.'))} /></div>
               <span className={`mm-restaurant-availability ${r.abierto ? '' : 'is-closed'}`}>{r.abierto ? '● Abierto ahora' : 'Cerrado'}</span>
-              <Link href={`/restaurante/${r.slug}`} className="mm-restaurant-cta">Ver carta <span aria-hidden="true">→</span></Link>
+              <button type="button" onClick={() => mostrarCartaEnInicio(r)} className="mm-restaurant-cta">Ver carta <span aria-hidden="true">→</span></button>
               <span className="mm-restaurant-copy">
                 <strong>{r.nombre}</strong>
                 <span className="mm-restaurant-subtitle">{primeraCategoria ? `${primeraCategoria.emoji || '🍽️'} ${primeraCategoria.nombre}` : 'Restaurante MotoMoto'}{r.direccion_fisica ? ` · ${r.direccion_fisica}` : ''}</span>
