@@ -70,7 +70,7 @@ function SearchPanel({
   )
 }
 
-export default function HeaderSearch() {
+export default function HeaderSearch({ mobileInline = false }: { mobileInline?: boolean }) {
   const router = useRouter()
   const desktopInput = useRef<HTMLInputElement>(null)
   const mobileInput = useRef<HTMLInputElement>(null)
@@ -172,7 +172,12 @@ export default function HeaderSearch() {
         {open && <div className="absolute left-0 right-0 top-[calc(100%+10px)] max-h-[min(66dvh,480px)] overflow-y-auto rounded-[24px] border border-white/15 bg-[#090a0d]/95 shadow-2xl shadow-black/60 backdrop-blur-2xl"><SearchPanel {...props} /></div>}
       </form>
 
-      <button type="button" onClick={openMobileSearch} aria-label="Buscar" className="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-white/15 bg-black/45 text-xl text-white md:hidden">⌕</button>
+      {mobileInline ? (
+        <button type="button" onClick={openMobileSearch} aria-label="Buscar restaurantes y platos" className="flex h-11 min-w-0 flex-1 items-center gap-2.5 rounded-full border border-white/20 bg-[#111] px-3.5 text-left text-sm text-white/65 transition hover:border-white/35">
+          <svg viewBox="0 0 24 24" aria-hidden="true" className="h-[18px] w-[18px] shrink-0 fill-none stroke-current stroke-[1.8]"><circle cx="10.8" cy="10.8" r="6.8"/><path strokeLinecap="round" d="m16 16 5 5"/></svg>
+          <span className="truncate">Buscar sushi, platos o restaurantes…</span>
+        </button>
+      ) : <button type="button" onClick={openMobileSearch} aria-label="Buscar" className="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-white/15 bg-black/45 text-xl text-white md:hidden">⌕</button>}
       {mobileOpen && <div className="fixed inset-0 z-[80] flex flex-col bg-black/85 p-3 pt-[max(12px,env(safe-area-inset-top))] backdrop-blur-2xl md:hidden">
         <form onSubmit={(event) => { event.preventDefault(); buscar() }} className="flex h-12 shrink-0 items-center gap-3 rounded-full border border-white/25 bg-black/65 px-4">
           <button type="button" onClick={() => setMobileOpen(false)} aria-label="Volver" className="text-xl text-white/70">←</button>

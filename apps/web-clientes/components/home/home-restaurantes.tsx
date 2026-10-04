@@ -1,14 +1,14 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import type { CSSProperties } from 'react'
 import { useEnviosMultiples } from '@/hooks/use-envio'
 import { useDireccionActual, type DireccionLocal } from '@/hooks/use-direccion-actual'
 import { ABRIR_DIRECCION_EVENT } from '@/lib/direccion-events'
 import { FavoritoButton, usePreferenciasCliente } from '@/components/ui/preferencias-cliente'
-import RestaurantShowcase from './restaurant-showcase'
 import type { EnvioInfo } from '@/hooks/use-envio'
 import PedidoModal from '@/components/carrito/pedido-modal'
+import { ABRIR_PEDIDO_EVENT } from '@/lib/pedido-events'
 
 export interface CategoriaRestaurante {
   slug: string
@@ -65,18 +65,16 @@ interface Props {
 
 type Orden = 'calificados' | 'rapidos' | 'envio' | 'cercanos'
 type RestauranteCardStyle = CSSProperties & {
-  '--restaurant-paint': string
   '--restaurant-index': number
 }
 
-const PALETAS = [
-  'linear-gradient(145deg,#e73982 0%,#8529b4 100%)',
-  'linear-gradient(145deg,#f45136 0%,#7d4a2e 100%)',
-  'linear-gradient(145deg,#41bce9 0%,#1765c9 100%)',
-  'linear-gradient(145deg,#ff9a16 0%,#ed510c 100%)',
-  'linear-gradient(145deg,#e94d66 0%,#7c258c 100%)',
-  'linear-gradient(145deg,#62c4f5 0%,#3161d8 100%)',
-]
+function iconoCategoria(categoria?: CategoriaRestaurante | null) {
+  if (!categoria) return '🍽️'
+  if (categoria.emoji) return categoria.emoji
+  if (/pizza/.test(categoria.slug)) return '🍕'
+  if (/chifa|chaufa/.test(categoria.slug)) return '🍜'
+  return '🍽️'
+}
 
 function valorNumerico(valor: unknown): number | null {
   if (valor == null || (typeof valor === 'string' && !valor.trim())) return null
@@ -96,11 +94,26 @@ export default function HomeRestaurantes({ restaurantes, direccionDeBD, estaLogu
   const [categoria, setCategoria] = useState<string | null>(null)
   const [orden, setOrden] = useState<Orden>('calificados')
   const [pedidoAbierto, setPedidoAbierto] = useState(false)
+  const [bannerIndex, setBannerIndex] = useState(0)
   const preferencias = usePreferenciasCliente()
   const { favoritos, pendientes, toggleFavorito, clave } = preferencias
+  const banners = useMemo(() => restaurantes.filter((restaurante) => restaurante.banner_url || restaurante.logo_url).slice(0, 5), [restaurantes])
+  const bannerActivo = banners[bannerIndex % Math.max(banners.length, 1)]
 
   const ids = useMemo(() => restaurantes.map((r) => r.id), [restaurantes])
   const { envios, loading } = useEnviosMultiples(ids, lat, lng)
+
+  useEffect(() => {
+    if (banners.length < 2) return
+    const timer = window.setInterval(() => setBannerIndex((index) => (index + 1) % banners.length), 5200)
+    return () => window.clearInterval(timer)
+  }, [banners.length])
+
+  useEffect(() => {
+    const abrirPedido = () => setPedidoAbierto(true)
+    window.addEventListener(ABRIR_PEDIDO_EVENT, abrirPedido)
+    return () => window.removeEventListener(ABRIR_PEDIDO_EVENT, abrirPedido)
+  }, [])
 
   const categorias = useMemo(() => {
     const porSlug = new Map<string, CategoriaRestaurante>()
@@ -109,9 +122,6 @@ export default function HomeRestaurantes({ restaurantes, direccionDeBD, estaLogu
     }))
     return [...porSlug.values()].sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'))
   }, [restaurantes])
-
-  const [categoriaShowcase, setCategoriaShowcase] = useState<string | null>(() => categorias[0]?.slug || null)
-  const [restauranteShowcase, setRestauranteShowcase] = useState('')
 
   const filtrados = useMemo(() => {
     const rows = restaurantes.filter((r) => !categoria || r.categorias.some((c) => c.slug === categoria))
@@ -130,19 +140,6 @@ export default function HomeRestaurantes({ restaurantes, direccionDeBD, estaLogu
     }
   }
 
-  const cambiarCategoriaShowcase = (slug: string | null) => {
-    setCategoriaShowcase(slug)
-    const primero = restaurantes.find((r) => !slug || r.categorias.some((c) => c.slug === slug))
-    setRestauranteShowcase(primero?.id || '')
-  }
-
-  const mostrarCartaEnInicio = (restaurante: RestauranteHome) => {
-    const slug = restaurante.categorias[0]?.slug || null
-    setCategoriaShowcase(slug)
-    setRestauranteShowcase(restaurante.id)
-    document.getElementById('locales')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
-
   const textoEnvio = (restaurante: RestauranteHome) => {
     if (lat == null || lng == null) return '📍 Agrega tu ubicación'
     if (loading && !envios[restaurante.id]) return '🛵 Calculando…'
@@ -156,41 +153,49 @@ export default function HomeRestaurantes({ restaurantes, direccionDeBD, estaLogu
 
   return (
     <section id="todos" aria-label="Todos los restaurantes" className="mm-restaurants mx-auto w-full max-w-6xl px-4 pb-28 pt-7 md:pb-16">
-      <svg className="pointer-events-none absolute h-0 w-0" aria-hidden="true" focusable="false">
-        <filter id="mmRestaurantRough" x="-6%" y="-6%" width="112%" height="112%">
-          <feTurbulence type="fractalNoise" baseFrequency=".04" numOctaves="3" seed="7" result="noise" />
-          <feDisplacementMap in="SourceGraphic" in2="noise" scale="7" xChannelSelector="R" yChannelSelector="G" />
-        </filter>
-      </svg>
-
-      <RestaurantShowcase
-        restaurantes={restaurantes}
-        categorias={categorias}
-        envios={envios}
-        categoriaActiva={categoriaShowcase}
-        restauranteActivoId={restauranteShowcase}
-        onCambiarCategoria={cambiarCategoriaShowcase}
-        onCambiarRestaurante={setRestauranteShowcase}
-        preferencias={preferencias}
-        onOpenOrder={() => setPedidoAbierto(true)}
-      />
-
       <PedidoModal open={pedidoAbierto} onClose={() => setPedidoAbierto(false)} estaLogueado={estaLogueado} direccionDeBD={direccionDeBD} restaurantes={restaurantes} costoVip={costoVip} />
 
-      <div className="mb-5 mt-12 flex flex-wrap items-end justify-between gap-3">
+      {bannerActivo && <section className="mm-mobile-hero md:hidden" aria-label="Restaurantes destacados">
+        <img key={bannerActivo.id} src={bannerActivo.banner_url || bannerActivo.logo_url || ''} alt="" className="mm-mobile-hero-image" />
+        <div className="mm-mobile-hero-shade" />
+        <div className="mm-mobile-hero-copy">
+          <span>Descubre MotoMoto</span>
+          <h2>{bannerActivo.nombre}</h2>
+          <p>{bannerActivo.subtitulo || 'Tus sabores favoritos, recién preparados.'}</p>
+          <a href={`/restaurante/${bannerActivo.slug}`}>Ver restaurante <span aria-hidden="true">→</span></a>
+        </div>
+        {banners.length > 1 && <div className="mm-mobile-hero-dots" aria-label="Elegir restaurante destacado">
+          {banners.map((restaurante, index) => <button key={restaurante.id} type="button" aria-label={`Mostrar ${restaurante.nombre}`} aria-current={index === bannerIndex} onClick={() => setBannerIndex(index)} className={index === bannerIndex ? 'is-active' : ''} />)}
+        </div>}
+      </section>}
+
+      <nav id="restaurant-categories" aria-label="Categorías de restaurantes" className="mm-mobile-categories md:hidden">
+        <button type="button" aria-pressed={!categoria} onClick={() => setCategoria(null)} className={!categoria ? 'is-active' : ''}><span className="mm-mobile-category-icon">🍽️</span><span>Todos</span></button>
+        {categorias.map((c) => <button type="button" key={c.slug} aria-pressed={categoria === c.slug} onClick={() => setCategoria(c.slug)} className={categoria === c.slug ? 'is-active' : ''}><span className="mm-mobile-category-icon">{iconoCategoria(c)}</span><span>{c.nombre}</span></button>)}
+      </nav>
+
+      <div className="mm-mobile-restaurants-heading md:hidden">
+        <h2>Restaurantes populares</h2>
+        <span>{filtrados.length}</span>
+      </div>
+
+      <div className="mm-desktop-restaurants-heading mb-5 hidden flex-wrap items-end justify-between gap-3 md:flex">
         <div>
           <span className="motomoto-display inline-block rounded-full bg-brand/90 px-3 py-1 text-[10px] font-black uppercase tracking-[.18em] text-white shadow-lg shadow-brand/30">Explora</span>
-          <h1 className="motomoto-display mt-2 text-3xl font-black uppercase leading-none text-white drop-shadow-lg sm:text-4xl md:text-5xl">Todos los <span className="text-brand-light">restaurantes</span></h1>
+          <h1 className="motomoto-display mt-2 text-3xl font-black uppercase leading-none text-[#111827] sm:text-4xl md:text-5xl">Todos los <span className="text-[#2447db]">restaurantes</span></h1>
         </div>
-        <span className="motomoto-display rounded-full border border-white/10 bg-black/55 px-4 py-2 text-xs font-bold text-white backdrop-blur">{filtrados.length} {filtrados.length === 1 ? 'restaurante' : 'restaurantes'}</span>
+        <div className="flex items-center gap-2">
+          <span className="motomoto-display rounded-full border border-black/10 bg-black/[.04] px-4 py-2 text-xs font-bold text-[#303849]">{filtrados.length} {filtrados.length === 1 ? 'restaurante' : 'restaurantes'}</span>
+          <button type="button" onClick={() => setPedidoAbierto(true)} className="motomoto-display rounded-full bg-[#2447db] px-4 py-2.5 text-xs font-black text-white shadow-md transition hover:-translate-y-0.5 hover:bg-[#1b39bd]">🛒 Mi pedido</button>
+        </div>
       </div>
 
       <div className="mb-4 space-y-2">
-        <nav aria-label="Filtrar restaurantes por categoría" className="mm-filter-row">
+        <nav aria-label="Filtrar restaurantes por categoría" className="mm-filter-row hidden md:flex">
           <button type="button" aria-pressed={!categoria} onClick={() => setCategoria(null)} className={`mm-filter-chip ${!categoria ? 'is-active' : ''}`}>🍽️ Todos</button>
-          {categorias.map((c) => <button type="button" key={c.slug} aria-pressed={categoria === c.slug} onClick={() => setCategoria(c.slug)} className={`mm-filter-chip ${categoria === c.slug ? 'is-active' : ''}`}>{c.emoji || '🍽️'} {c.nombre}</button>)}
+          {categorias.map((c) => <button type="button" key={c.slug} aria-pressed={categoria === c.slug} onClick={() => setCategoria(c.slug)} className={`mm-filter-chip ${categoria === c.slug ? 'is-active' : ''}`}><span aria-hidden="true">{iconoCategoria(c)}</span> {c.nombre}</button>)}
         </nav>
-        <nav aria-label="Ordenar restaurantes" className="mm-filter-row">
+        <nav aria-label="Ordenar restaurantes" className="mm-filter-row hidden md:flex">
           {([
             ['calificados', '⭐ Mejor calificados'],
             ['rapidos', '⚡ Más rápidos'],
@@ -201,9 +206,9 @@ export default function HomeRestaurantes({ restaurantes, direccionDeBD, estaLogu
       </div>
 
       {lat == null || lng == null ? (
-        <button type="button" onClick={() => window.dispatchEvent(new Event(ABRIR_DIRECCION_EVENT))} className="mb-6 flex w-full items-center gap-3 rounded-2xl border border-[#ff7628]/35 bg-black/55 p-4 text-left shadow-lg backdrop-blur-xl transition hover:border-[#ff7628]/70 hover:bg-black/70">
+        <button type="button" onClick={() => window.dispatchEvent(new Event(ABRIR_DIRECCION_EVENT))} className="mb-6 hidden w-full items-center gap-3 rounded-2xl border border-[#d9d4ca] bg-white p-4 text-left shadow-sm transition hover:border-[#c83a2d]/50 hover:shadow-md md:flex">
           <span className="text-2xl" aria-hidden="true">🗺️</span>
-          <span><strong className="motomoto-display block text-sm font-black text-[#ffd45c]">Agrega tu ubicación</strong><span className="mt-0.5 block text-xs text-white/55">Calcularemos el precio real del delivery de cada restaurante.</span></span>
+          <span><strong className="motomoto-display block text-sm font-black text-[#171717]">Agrega tu ubicación</strong><span className="mt-0.5 block text-xs text-[#646464]">Calcularemos el precio real del delivery de cada restaurante.</span></span>
         </button>
       ) : null}
 
@@ -211,29 +216,30 @@ export default function HomeRestaurantes({ restaurantes, direccionDeBD, estaLogu
         {filtrados.map((r, index) => {
           const envio = envios[r.id]
           const primeraCategoria = r.categorias[0]
-          const paleta = PALETAS[index % PALETAS.length]
           const calificacion = Number(r.calificacion || 0)
           return (
-            <article key={r.id} className="mm-restaurant-card" style={{ '--restaurant-paint': paleta, '--restaurant-index': index % 6 } as RestauranteCardStyle}>
-              <span className="mm-restaurant-paint" aria-hidden="true" />
-              <div className="absolute left-3 top-3 z-10"><FavoritoButton compact active={favoritos.has(clave('restaurante', r.id))} pending={pendientes.has(clave('restaurante', r.id))} onClick={(source) => void toggleFavorito('restaurante', r.id, source).catch((error) => window.alert(error instanceof Error ? error.message : 'No se pudo actualizar el favorito.'))} /></div>
-              <span className={`mm-restaurant-availability ${r.abierto ? '' : 'is-closed'}`}>{r.abierto ? '● Abierto ahora' : 'Cerrado'}</span>
-              <button type="button" onClick={() => mostrarCartaEnInicio(r)} className="mm-restaurant-cta">Ver carta <span aria-hidden="true">→</span></button>
-              <span className="mm-restaurant-copy">
-                <strong>{r.nombre}</strong>
-                <span className="mm-restaurant-subtitle">{primeraCategoria ? `${primeraCategoria.emoji || '🍽️'} ${primeraCategoria.nombre}` : 'Restaurante MotoMoto'}{r.direccion_fisica ? ` · ${r.direccion_fisica}` : ''}</span>
-                <span className="mm-restaurant-meta">
-                  {calificacion > 0 && <span>⭐ {calificacion.toFixed(1)}{r.num_resenas > 0 ? ` · ${r.num_resenas}` : ''}</span>}
-                  {r.tiempo_estimado && <span>⏱ {r.tiempo_estimado}</span>}
-                  <span>{textoEnvio(r)}</span>
-                  <span>Desde S/ {Number(r.monto_minimo || 0).toFixed(2)}</span>
-                  {envio?.distancia_km != null && <span className="mm-distance-pill">📍 {envio.distancia_km.toFixed(1)} km</span>}
-                </span>
-                {!r.abierto && <span className="mm-restaurant-closed-note">Puedes revisar la carta; los pedidos se habilitan al abrir.</span>}
-              </span>
-              <span className="mm-restaurant-logo" aria-hidden="true">
-                {r.logo_url ? <img src={r.logo_url} alt="" loading="lazy" /> : <span>{primeraCategoria?.emoji || '🏪'}</span>}
-              </span>
+            <article key={r.id} className="mm-restaurant-card" style={{ '--restaurant-index': index % 6 } as RestauranteCardStyle}>
+              <a href={`/restaurante/${r.slug}`} className="mm-restaurant-media" aria-label={`Ver la carta de ${r.nombre}`}>
+                {r.banner_url || r.logo_url ? <img src={r.banner_url || r.logo_url || ''} alt="" loading="lazy" /> : <span className="mm-restaurant-placeholder" aria-hidden="true">{iconoCategoria(primeraCategoria)}</span>}
+                <span className="mm-restaurant-category"><span aria-hidden="true">{iconoCategoria(primeraCategoria)}</span>{primeraCategoria?.nombre || 'Restaurante'}</span>
+                <span className={`mm-restaurant-availability ${r.abierto ? '' : 'is-closed'}`}>{r.abierto ? 'Abierto' : 'Cerrado'}</span>
+              </a>
+              <div className="mm-restaurant-favorite"><FavoritoButton compact active={favoritos.has(clave('restaurante', r.id))} pending={pendientes.has(clave('restaurante', r.id))} onClick={(source) => void toggleFavorito('restaurante', r.id, source).catch((error) => window.alert(error instanceof Error ? error.message : 'No se pudo actualizar el favorito.'))} /></div>
+              <div className="mm-restaurant-content">
+                <div className="mm-restaurant-copy">
+                  <strong>{r.nombre}</strong>
+                  <span className="mm-restaurant-subtitle">{r.subtitulo || (r.direccion_fisica ? `📍 ${r.direccion_fisica}` : 'Descubre su carta')}</span>
+                </div>
+                <div className="mm-restaurant-meta">
+                  {calificacion > 0 && <span className="mm-restaurant-rating">★ {calificacion.toFixed(1)}{r.num_resenas > 0 ? ` (${r.num_resenas})` : ''}</span>}
+                  {r.tiempo_estimado && <span>◷ {r.tiempo_estimado}</span>}
+                  {envio?.distancia_km != null && <span>{envio.distancia_km.toFixed(1)} km</span>}
+                </div>
+                <div className="mm-restaurant-footer">
+                  <span className="mm-restaurant-delivery">{textoEnvio(r)}</span>
+                  <a href={`/restaurante/${r.slug}`} className="mm-restaurant-cta no-underline">Ver carta <span aria-hidden="true">→</span></a>
+                </div>
+              </div>
             </article>
           )
         })}

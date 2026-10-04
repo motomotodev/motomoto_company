@@ -1,30 +1,5 @@
 @import "tailwindcss";
 
-@font-face {
-  font-family: "MotoMoto Sharpie";
-  src: url("/fonts/Sharpie-Regular.woff2") format("woff2");
-  font-weight: 400;
-  font-display: swap;
-}
-@font-face {
-  font-family: "MotoMoto Sharpie";
-  src: url("/fonts/Sharpie-Bold.woff2") format("woff2");
-  font-weight: 700;
-  font-display: swap;
-}
-@font-face {
-  font-family: "MotoMoto Sharpie";
-  src: url("/fonts/Sharpie-Extrabold.woff2") format("woff2");
-  font-weight: 800;
-  font-display: swap;
-}
-@font-face {
-  font-family: "MotoMoto Sharpie";
-  src: url("/fonts/Sharpie-Black.woff2") format("woff2");
-  font-weight: 900;
-  font-display: swap;
-}
-
 @theme {
   /* ============================================
      PALETA MOTOMOTO (basada en el logo)
@@ -65,12 +40,57 @@ html {
 body {
   background-color: var(--color-surface-dark);
   color: #fff;
+  font-family: "Segoe UI", Helvetica, Arial, sans-serif;
   overscroll-behavior-y: none;
 }
 
 .motomoto-display {
-  font-family: "MotoMoto Sharpie", ui-sans-serif, system-ui, sans-serif;
+  font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+  font-style: normal;
 }
+
+.mm-mobile-header { background: #050505; padding: max(7px, env(safe-area-inset-top)) 13px 12px; color: #fff; }
+.mm-mobile-topbar { position: relative; display: flex; min-height: 39px; align-items: center; justify-content: space-between; }
+.mm-mobile-icon-button { position: relative; display: grid; width: 38px; height: 38px; flex: none; place-items: center; border: 0; border-radius: 50%; background: transparent; color: #f7f7f7; transition: background .2s ease, transform .2s ease; }
+.mm-mobile-icon-button:active { transform: scale(.92); background: #ffffff16; }
+.mm-mobile-brand { position: absolute; left: 50%; display: flex; align-items: center; gap: 3px; transform: translateX(-50%); color: #fff; font-size: 19px; font-weight: 800; letter-spacing: .01em; text-decoration: none; white-space: nowrap; }
+.mm-mobile-brand > span > span { color: #3865ed; }
+.mm-mobile-actions { display: flex; align-items: center; gap: 2px; }
+.mm-mobile-cart-count { position: absolute; top: 0; right: -1px; display: grid; min-width: 16px; height: 16px; place-items: center; border-radius: 99px; background: #c83a2d; padding: 0 4px; color: #fff; font-size: 9px; font-weight: 800; }
+.mm-mobile-search-row { display: flex; align-items: center; gap: 10px; margin-top: 9px; }
+.mm-mobile-search-row > :first-child { min-width: 0; flex: 1; }
+.mm-mobile-filter-button { display: grid; width: 42px; height: 42px; flex: none; place-items: center; border: 1px solid #ffffff25; border-radius: 50%; background: #101010; color: #fff; transition: border-color .2s ease, transform .2s ease; }
+.mm-mobile-filter-button:active { transform: scale(.94); border-color: #c83a2d; }
+.mm-mobile-menu { position: absolute; z-index: 70; top: calc(100% - 2px); left: 12px; display: grid; width: min(270px, calc(100vw - 24px)); gap: 3px; border: 1px solid #ffffff18; border-radius: 18px; background: #101010; padding: 8px; box-shadow: 0 18px 40px #0009; }
+.mm-mobile-menu a, .mm-mobile-menu button { display: flex; min-height: 42px; align-items: center; border: 0; border-radius: 11px; background: transparent; padding: 0 12px; color: #f5f5f5; font: inherit; font-size: 14px; text-align: left; text-decoration: none; }
+.mm-mobile-menu a:active, .mm-mobile-menu button:active { background: #ffffff12; }
+
+.mm-mobile-hero { position: relative; aspect-ratio: 1.65 / 1; overflow: hidden; margin: 0 0 17px; border-radius: 22px; background: #090909; color: #fff; isolation: isolate; }
+.mm-mobile-hero-image { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; animation: mm-mobile-hero-image-in .7s ease both; }
+.mm-mobile-hero-shade { position: absolute; z-index: 1; inset: 0; background: linear-gradient(90deg, #050505f2 0%, #050505d9 34%, #0505054d 68%, #0505050a 100%), linear-gradient(0deg, #0505059c 0%, transparent 48%); }
+.mm-mobile-hero-copy { position: absolute; z-index: 2; top: 50%; left: 18px; width: min(60%, 245px); transform: translateY(-50%); animation: mm-mobile-hero-copy-in .55s cubic-bezier(.2,.8,.2,1) both; }
+.mm-mobile-hero-copy > span { color: #ee7261; font-size: 12px; font-style: italic; font-weight: 700; }
+.mm-mobile-hero-copy h2 { display: -webkit-box; overflow: hidden; margin-top: 5px; color: #fff; font-size: clamp(21px, 6vw, 29px); font-weight: 800; line-height: 1.08; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+.mm-mobile-hero-copy p { display: -webkit-box; overflow: hidden; margin-top: 7px; color: #ffffffd9; font-size: 11px; line-height: 1.4; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+.mm-mobile-hero-copy a { display: inline-flex; align-items: center; gap: 9px; margin-top: 11px; border-radius: 999px; background: #c83a2d; padding: 8px 12px; color: white; font-size: 10px; font-weight: 700; text-decoration: none; transition: transform .2s ease, background .2s ease; }
+.mm-mobile-hero-copy a:active { transform: scale(.96); background: #a92d24; }
+.mm-mobile-hero-copy a span { display: grid; width: 18px; height: 18px; place-items: center; border-radius: 50%; background: #fff; color: #c83a2d; font-size: 13px; }
+.mm-mobile-hero-dots { position: absolute; z-index: 3; right: 0; bottom: 11px; left: 0; display: flex; justify-content: center; gap: 7px; }
+.mm-mobile-hero-dots button { width: 7px; height: 7px; border: 0; border-radius: 99px; background: #ffffffb3; padding: 0; transition: width .25s ease, background .25s ease; }
+.mm-mobile-hero-dots button.is-active { width: 19px; background: #c83a2d; }
+.mm-mobile-categories { display: flex; gap: 4px; overflow-x: auto; margin: 0 -2px 17px; padding: 2px 2px 5px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+.mm-mobile-categories::-webkit-scrollbar { display: none; }
+.mm-mobile-categories > button { display: flex; min-width: 49px; flex: 1 0 49px; flex-direction: column; align-items: center; gap: 4px; border: 0; background: transparent; padding: 0; color: #282828; font-family: inherit; font-size: 10px; font-weight: 600; white-space: nowrap; }
+.mm-mobile-category-icon { display: grid; width: 46px; height: 46px; place-items: center; border: 1px solid #ece9e3; border-radius: 50%; background: #fff; color: #171717; font-size: 21px; box-shadow: 0 2px 7px #0000000d; transition: border-color .2s ease, background .2s ease, color .2s ease, transform .2s ease; }
+.mm-mobile-categories > button.is-active { color: #a92d24; }
+.mm-mobile-categories > button.is-active .mm-mobile-category-icon { border-color: #c83a2d; background: #c83a2d; color: #fff; transform: translateY(-1px); }
+.mm-mobile-restaurants-heading { display: flex; align-items: center; justify-content: space-between; margin: 0 0 10px; color: #191919; }
+.mm-mobile-restaurants-heading h2 { font-size: 18px; font-weight: 750; letter-spacing: -.02em; }
+.mm-mobile-restaurants-heading > span { color: #77736d; font-size: 12px; }
+@keyframes mm-mobile-hero-image-in { from { opacity: .65; transform: scale(1.035); } to { opacity: 1; transform: scale(1); } }
+@keyframes mm-mobile-hero-copy-in { from { opacity: 0; translate: 0 8px; } to { opacity: 1; translate: 0 0; } }
+@media (max-width: 380px) { .mm-mobile-hero { aspect-ratio: 1.48 / 1; } .mm-mobile-hero-copy { left: 14px; width: 64%; } .mm-mobile-hero-copy p { font-size: 10px; } }
+@media (prefers-reduced-motion: reduce) { .mm-mobile-icon-button, .mm-mobile-filter-button, .mm-mobile-hero-image, .mm-mobile-hero-copy, .mm-mobile-hero-copy a, .mm-mobile-hero-dots button, .mm-mobile-category-icon { animation: none; transition: none; } }
 
 .motomoto-map-tiles {
   filter: grayscale(1) brightness(.82) contrast(1.12);
@@ -102,41 +122,46 @@ body {
   to { opacity: 1; transform: rotate(-45deg) scale(1); }
 }
 
-.mm-restaurants { position: relative; }
+.mm-restaurants { position: relative; border: 1px solid #e7e3dc; border-radius: 30px; background: #f7f5f0; padding: 24px; color: #171717; }
 .mm-filter-row { display: flex; gap: .5rem; overflow-x: auto; padding: 2px 2px 7px; scrollbar-width: none; }
 .mm-filter-row::-webkit-scrollbar { display: none; }
-.mm-filter-chip { flex: none; border: 1px solid rgb(255 255 255 / .1); border-radius: 999px; background: rgb(0 0 0 / .52); padding: .55rem .95rem; color: white; font-family: "MotoMoto Sharpie", ui-sans-serif, system-ui, sans-serif; font-size: .78rem; font-weight: 800; backdrop-filter: blur(9px); transition: transform .22s ease, background .22s ease, box-shadow .22s ease; }
-.mm-filter-chip:hover { transform: translateY(-2px); }
-.mm-filter-chip.is-active { border-color: transparent; background: #2447db; box-shadow: 0 0 18px rgb(44 79 232 / .48); }
-.mm-sort-chip.is-active { background: #ff7628; box-shadow: 0 0 18px rgb(255 122 41 / .38); }
-.mm-restaurant-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 62px 18px; padding: 8px 4px 44px; }
-.mm-restaurant-card { position: relative; z-index: 0; display: flex; min-width: 0; min-height: 270px; flex-direction: column; align-items: center; overflow: visible; padding: 20px 13px 0; color: white; text-align: center; text-decoration: none; isolation: isolate; opacity: 0; animation: mm-restaurant-enter .5s cubic-bezier(.2,.8,.2,1) forwards; animation-delay: calc(var(--restaurant-index, 0) * 55ms); transition: transform .35s cubic-bezier(.2,.8,.2,1); }
-.mm-restaurant-card:hover, .mm-restaurant-card:focus-visible { z-index: 1; transform: translateY(-6px); outline: none; }
-.mm-restaurant-card:focus-visible .mm-restaurant-paint { outline: 2px solid white; outline-offset: 4px; }
-.mm-restaurant-paint { position: absolute; z-index: -1; inset: 0; background: var(--restaurant-paint); filter: url(#mmRestaurantRough) drop-shadow(0 10px 12px rgb(0 0 0 / .42)); }
-.mm-restaurant-paint::after { position: absolute; inset: 9px; border: 1.5px solid rgb(255 255 255 / .5); border-radius: 4px; content: ""; }
-.mm-restaurant-availability { position: absolute; top: 13px; right: 16px; border: 1px solid rgb(255 255 255 / .15); border-radius: 999px; background: rgb(0 0 0 / .4); padding: 4px 9px; color: #9bffb8; font-size: .59rem; font-weight: 800; }
-.mm-restaurant-availability.is-closed { color: #ffe4d5; }
-.mm-restaurant-cta { display: inline-flex; align-items: center; justify-content: center; gap: 7px; margin-top: 2px; border: 0; border-radius: 999px; background: linear-gradient(135deg,#ff6a2b,#e0301e); padding: 8px 18px; color: white; cursor: pointer; box-shadow: 0 4px 0 rgb(0 0 0 / .25); font-family: "MotoMoto Sharpie", ui-sans-serif, system-ui, sans-serif; font-size: .78rem; font-weight: 900; transition: transform .28s ease; }
-.mm-restaurant-cta span { transition: transform .25s ease; }
-.mm-restaurant-card:hover .mm-restaurant-cta { transform: scale(1.06); }
-.mm-restaurant-card:hover .mm-restaurant-cta span { transform: translateX(4px); }
-.mm-restaurant-copy { display: flex; width: 100%; flex-direction: column; align-items: center; gap: 7px; margin-top: 11px; }
-.mm-restaurant-copy > strong { max-width: 100%; overflow: hidden; font-family: "MotoMoto Sharpie", ui-sans-serif, system-ui, sans-serif; font-size: 1rem; font-weight: 900; line-height: 1.15; text-overflow: ellipsis; text-shadow: 0 2px 4px rgb(0 0 0 / .55); white-space: nowrap; }
-.mm-restaurant-subtitle { max-width: 100%; overflow: hidden; color: rgb(255 255 255 / .88); font-size: .69rem; font-weight: 700; text-overflow: ellipsis; text-shadow: 0 1px 3px rgb(0 0 0 / .5); white-space: nowrap; }
-.mm-restaurant-meta { display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; }
-.mm-restaurant-meta span { border-radius: 999px; background: rgb(0 0 0 / .34); padding: 4px 8px; color: white; font-size: .62rem; font-weight: 800; }
-.mm-restaurant-meta span:first-child { color: #ffe17c; }
-.mm-restaurant-meta .mm-distance-pill { color: #9bffb8; }
-.mm-restaurant-closed-note { color: #ffe7d7; font-size: .63rem; }
-.mm-restaurant-logo { position: relative; display: grid; width: 100px; height: 100px; flex: none; place-items: center; overflow: hidden; margin: auto 0 -43px; border: 4px solid #10111a; border-radius: 50%; background: rgb(0 0 0 / .72); box-shadow: 0 12px 22px rgb(0 0 0 / .48), inset 0 0 0 1px rgb(255 255 255 / .35); font-size: 2.9rem; transition: transform .4s cubic-bezier(.2,.8,.2,1); }
-.mm-restaurant-logo::after { position: absolute; inset: 5px; border: 1px dashed rgb(255 255 255 / .55); border-radius: inherit; content: ""; pointer-events: none; }
-.mm-restaurant-logo img { width: 100%; height: 100%; object-fit: cover; }
-.mm-restaurant-card:hover .mm-restaurant-logo { transform: translateY(-6px) rotate(-6deg) scale(1.06); }
-.mm-restaurant-empty { grid-column: 1 / -1; border: 1px solid rgb(255 255 255 / .12); border-radius: 24px; background: rgb(0 0 0 / .55); padding: 36px 14px; color: rgb(255 255 255 / .72); text-align: center; backdrop-filter: blur(10px); }
-@keyframes mm-restaurant-enter { from { opacity: 0; transform: translateY(22px) scale(.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
-@media (max-width: 800px) { .mm-restaurant-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 54px 12px; } .mm-restaurant-card { min-height: 270px; padding: 18px 9px 0; } .mm-restaurant-logo { width: 90px; height: 90px; margin-bottom: -39px; } .mm-restaurant-copy > strong { font-size: .9rem; } .mm-restaurant-availability { right: 9px; font-size: .52rem; } .mm-restaurant-cta { padding: 7px 13px; font-size: .7rem; } }
-@media (prefers-reduced-motion: reduce) { .mm-restaurant-card { opacity: 1; animation: none; transition: none; } .mm-restaurant-logo, .mm-restaurant-cta { transition: none; } }
+.mm-filter-chip { display: inline-flex; flex: none; align-items: center; gap: 7px; border: 1px solid #e1ddd5; border-radius: 999px; background: #fff; padding: .55rem .95rem; color: #242424; font-family: "Segoe UI", Helvetica, Arial, sans-serif; font-size: .78rem; font-weight: 700; transition: transform .22s ease, background .22s ease, box-shadow .22s ease; }
+.mm-filter-chip:hover { transform: translateY(-2px); box-shadow: 0 5px 12px #1a15120f; }
+.mm-filter-chip.is-active { border-color: #c83a2d; background: #c83a2d; color: #fff; box-shadow: 0 5px 12px #c83a2d33; }
+.mm-sort-chip.is-active { border-color: #252525; background: #252525; color: #fff; box-shadow: 0 5px 12px #17171722; }
+.mm-restaurant-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; padding: 8px 0 12px; }
+.mm-restaurant-card { position: relative; display: flex; min-width: 0; flex-direction: column; overflow: hidden; border: 1px solid #e8e5df; border-radius: 22px; background: #fff; color: #171717; text-align: left; box-shadow: 0 5px 16px #18130d0b; opacity: 0; animation: mm-restaurant-enter .48s cubic-bezier(.2,.8,.2,1) forwards; animation-delay: calc(var(--restaurant-index, 0) * 55ms); transition: transform .28s ease, box-shadow .28s ease; }
+.mm-restaurant-card:hover, .mm-restaurant-card:focus-within { z-index: 1; transform: translateY(-4px); box-shadow: 0 14px 28px #18130d1a; }
+.mm-restaurant-media { position: relative; display: grid; aspect-ratio: 1.65 / 1; place-items: center; overflow: hidden; background: #171717; color: white; text-decoration: none; }
+.mm-restaurant-media::after { position: absolute; inset: 30% 0 0; background: linear-gradient(transparent, #0009); content: ""; pointer-events: none; }
+.mm-restaurant-media > img { width: 100%; height: 100%; object-fit: cover; transition: transform .45s cubic-bezier(.2,.8,.2,1); }
+.mm-restaurant-card:hover .mm-restaurant-media > img { transform: scale(1.045); }
+.mm-restaurant-placeholder { display: grid; width: 100%; height: 100%; place-items: center; background: radial-gradient(circle at 70% 25%, #4b2522, #141414 65%); font-size: 4rem; }
+.mm-restaurant-category { position: absolute; z-index: 1; bottom: 12px; left: 12px; display: inline-flex; align-items: center; gap: 6px; border: 1px solid #ffffff33; border-radius: 999px; background: #171717d9; padding: 6px 10px; color: #fff; font-size: .72rem; font-weight: 700; backdrop-filter: blur(8px); }
+.mm-restaurant-availability { position: absolute; z-index: 1; top: 12px; left: 12px; border: 1px solid #d5f4df; border-radius: 999px; background: #e9fff0; padding: 5px 9px; color: #16763d; font-size: .68rem; font-weight: 700; }
+.mm-restaurant-availability::before { margin-right: 5px; content: "●"; font-size: .55rem; }
+.mm-restaurant-availability.is-closed { border-color: #f1d3d1; background: #fff1ef; color: #a52c26; }
+.mm-restaurant-availability.is-closed::before { content: "●"; }
+.mm-restaurant-favorite { position: absolute; z-index: 2; top: 10px; right: 10px; }
+.mm-restaurant-content { display: flex; flex: 1; flex-direction: column; gap: 10px; padding: 13px 14px 14px; }
+.mm-restaurant-copy { display: flex; min-width: 0; flex-direction: column; align-items: flex-start; gap: 4px; }
+.mm-restaurant-copy > strong { max-width: 100%; overflow: hidden; color: #171717; font-family: "Segoe UI", Helvetica, Arial, sans-serif; font-size: 1rem; font-weight: 750; line-height: 1.25; text-overflow: ellipsis; white-space: nowrap; }
+.mm-restaurant-subtitle { max-width: 100%; overflow: hidden; color: #6d6b68; font-size: .75rem; font-weight: 400; text-overflow: ellipsis; white-space: nowrap; }
+.mm-restaurant-meta { display: flex; flex-wrap: wrap; gap: 7px 12px; color: #575652; font-size: .7rem; font-weight: 600; }
+.mm-restaurant-meta span { padding: 0; color: inherit; font-size: inherit; font-weight: inherit; }
+.mm-restaurant-meta .mm-restaurant-rating { color: #a52c26; }
+.mm-restaurant-footer { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: auto; border-top: 1px solid #eeece8; padding-top: 10px; }
+.mm-restaurant-delivery { min-width: 0; overflow: hidden; color: #454440; font-size: .7rem; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+.mm-restaurant-cta { display: inline-flex; flex: none; align-items: center; justify-content: center; gap: 8px; border: 0; border-radius: 999px; background: #c83a2d; padding: 8px 11px 8px 13px; color: white; cursor: pointer; font-family: "Segoe UI", Helvetica, Arial, sans-serif; font-size: .72rem; font-weight: 700; transition: transform .24s ease, background .24s ease; }
+.mm-restaurant-cta span { display: grid; width: 22px; height: 22px; place-items: center; border-radius: 50%; background: #fff; color: #c83a2d; transition: transform .24s ease; }
+.mm-restaurant-cta:hover { transform: translateY(-1px); background: #a92d24; }
+.mm-restaurant-cta:hover span { transform: translateX(2px); }
+.mm-restaurant-empty { grid-column: 1 / -1; border: 1px solid #e8e5df; border-radius: 24px; background: #fff; padding: 36px 14px; color: #5f5d59; text-align: center; }
+@keyframes mm-restaurant-enter { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+@media (max-width: 900px) { .mm-restaurants { padding: 20px; } .mm-restaurant-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; } }
+@media (max-width: 540px) { .mm-restaurants { border-radius: 24px; padding: 17px 14px; } .mm-restaurant-grid { gap: 11px; } .mm-restaurant-content { gap: 8px; padding: 10px; } .mm-restaurant-copy > strong { font-size: .9rem; } .mm-restaurant-subtitle, .mm-restaurant-delivery { font-size: .66rem; } .mm-restaurant-category { bottom: 9px; left: 9px; padding: 5px 8px; font-size: .62rem; } .mm-restaurant-availability { top: 9px; left: 9px; padding: 4px 7px; font-size: .59rem; } .mm-restaurant-favorite { top: 6px; right: 6px; } .mm-restaurant-cta { gap: 5px; padding: 7px 8px 7px 10px; font-size: .66rem; } .mm-restaurant-cta span { width: 20px; height: 20px; } }
+@media (max-width: 380px) { .mm-restaurant-grid { grid-template-columns: minmax(0, 1fr); } .mm-restaurant-media { aspect-ratio: 1.8 / 1; } }
+@media (prefers-reduced-motion: reduce) { .mm-restaurant-card { opacity: 1; animation: none; transition: none; } .mm-restaurant-media > img, .mm-restaurant-cta, .mm-restaurant-cta span { transition: none; } }
 
 .motomoto-logo-mark {
   display: inline-flex;
@@ -245,8 +270,8 @@ body {
 
 .mm-home-dish { animation: mm-home-dish-in .72s cubic-bezier(.2,.8,.25,1) both; }
 .mm-home-title { animation: mm-home-title-in .45s cubic-bezier(.2,.8,.25,1) both; }
-.mm-home-showcase { font-family: "MotoMoto Sharpie", ui-sans-serif, system-ui, sans-serif; }
-.mm-home-category-nav { font-family: "MotoMoto Sharpie", ui-sans-serif, system-ui, sans-serif; }
+.mm-home-showcase { font-family: "Segoe UI", Helvetica, Arial, sans-serif; }
+.mm-home-category-nav { font-family: "Segoe UI", Helvetica, Arial, sans-serif; }
 .mm-home-showcase button,
 .mm-home-category-nav button { font-family: inherit; transition: transform .28s cubic-bezier(.2,.8,.2,1), filter .25s ease, box-shadow .28s ease, background-color .25s ease; }
 .mm-home-showcase button:not(:disabled):hover,
@@ -344,7 +369,7 @@ body {
 }
 .mm-home-showcase.mm-home-menu-open { min-height: 560px; }
 .mm-home-showcase > div.absolute.inset-0.z-20 { display: none !important; }
-.mm-home-menu-overlay { container-type: inline-size; background: linear-gradient(145deg, rgb(8 10 17 / .985), rgb(4 5 10 / .99)); font-family: "MotoMoto Sharpie", ui-sans-serif, system-ui, sans-serif; animation: mm-home-menu-open .42s cubic-bezier(.2,.8,.2,1) both; }
+.mm-home-menu-overlay { container-type: inline-size; background: linear-gradient(145deg, rgb(8 10 17 / .985), rgb(4 5 10 / .99)); font-family: "Segoe UI", Helvetica, Arial, sans-serif; animation: mm-home-menu-open .42s cubic-bezier(.2,.8,.2,1) both; }
 .mm-home-menu-header { min-height: 66px; border-bottom: 1px solid rgb(255 255 255 / .12); }
 .mm-home-menu-back { display: inline-flex; height: 42px; align-items: center; gap: 5px; padding: 0 14px 0 10px; border: 1px solid rgb(255 255 255 / .2); border-radius: 999px; background: rgb(255 255 255 / .1); color: #fff; font-size: 13px; font-weight: 900; transition: transform .24s ease, background .24s ease; }
 .mm-home-menu-back > span:first-child { font: 24px/1 system-ui, sans-serif; }

@@ -1,6 +1,5 @@
 import { sql } from '@/lib/db'
 import { getSessionUser } from '@/lib/auth'
-import FondoDecorativo from '@/components/home/fondo-decorativo'
 import Header from '@/components/layout/header'
 import HomeRestaurantes, { type PlatoHome, type RestauranteHome } from '@/components/home/home-restaurantes'
 import { estaAbierto } from '@/lib/horarios/esta-abierto'
@@ -126,12 +125,11 @@ export default async function HomePage() {
   }
 
   return (
-    <>
-      <FondoDecorativo />
+    <div className="min-h-screen bg-white text-black">
       <Header user={user} direccionDeBD={direccionDeBD} />
       <main className="relative z-10">
-      <HomeRestaurantes restaurantes={restaurantes} direccionDeBD={direccionDeBD} estaLogueado={Boolean(user)} costoVip={Number(config[0]?.costo_vip || 0)} />
+        <HomeRestaurantes restaurantes={restaurantes} direccionDeBD={direccionDeBD} estaLogueado={Boolean(user)} costoVip={Number(config[0]?.costo_vip || 0)} />
       </main>
-    </>
+    </div>
   )
 }

@@ -9,6 +9,8 @@ import UserMenu from './user-menu'
 import MapaLocalesModal, { type PuntoEntregaMapa } from '@/components/mapa/mapa-locales-modal'
 import { guardarDireccionTemporal, limpiarDireccionTemporal, useDireccionActual, type DireccionLocal } from '@/hooks/use-direccion-actual'
 import { ABRIR_DIRECCION_EVENT } from '@/lib/direccion-events'
+import { ABRIR_PEDIDO_EVENT } from '@/lib/pedido-events'
+import { useCarrito } from '@/lib/carrito/store'
 
 type SocialKey = 'instagram' | 'tiktok' | 'facebook' | 'whatsapp' | 'youtube' | 'telegram' | 'x'
 type RedesSociales = Partial<Record<SocialKey, string | null>>
@@ -56,8 +58,16 @@ export default function Header({ user, direccionDeBD }: HeaderProps) {
   const router = useRouter()
   const [mapaAbierto, setMapaAbierto] = useState(false)
   const [iniciarMapaEnDirecciones, setIniciarMapaEnDirecciones] = useState(false)
+  const [menuMovilAbierto, setMenuMovilAbierto] = useState(false)
   const [redes, setRedes] = useState<RedesSociales>({})
   const direccionActual = useDireccionActual(direccionDeBD ?? null)
+  const [cantidadCarrito, setCantidadCarrito] = useState(0)
+
+  useEffect(() => {
+    const actualizarCantidad = () => setCantidadCarrito(useCarrito.getState().totalItems())
+    actualizarCantidad()
+    return useCarrito.subscribe(actualizarCantidad)
+  }, [])
 
   useEffect(() => {
     fetch('/api/redes-sociales', { cache: 'no-store' })
@@ -108,7 +118,43 @@ export default function Header({ user, direccionDeBD }: HeaderProps) {
 
   return (
     <>
-      <header className="relative z-40 mx-auto mt-2 w-[calc(100%-24px)] max-w-6xl rounded-full border border-white/15 bg-black/55 px-3 py-2 shadow-xl shadow-black/25 backdrop-blur-xl md:px-5">
+      <header className="mm-mobile-header relative z-40 md:hidden">
+        <div className="mm-mobile-topbar">
+          <button type="button" onClick={() => setMenuMovilAbierto((open) => !open)} aria-label={menuMovilAbierto ? 'Cerrar menú' : 'Abrir menú'} aria-expanded={menuMovilAbierto} className="mm-mobile-icon-button">
+            <svg viewBox="0 0 24 24" aria-hidden="true" className="h-6 w-6 fill-none stroke-current stroke-[1.8]"><path strokeLinecap="round" d={menuMovilAbierto ? 'm6 6 12 12M18 6 6 18' : 'M4 7h16M4 12h16M4 17h16'} /></svg>
+          </button>
+          <Link href="/" aria-label="MotoMoto, inicio" className="mm-mobile-brand">
+            <Image src="/logo-motomoto.png" alt="" width={30} height={36} priority className="h-8 w-7 object-contain" />
+            <span>Moto<span>Moto</span></span>
+          </Link>
+          <div className="mm-mobile-actions">
+            <button type="button" onClick={() => router.push(user ? '/perfil' : '/login')} aria-label={user ? `Mi perfil, ${user.nombre}` : 'Iniciar sesión'} className="mm-mobile-icon-button">
+              <svg viewBox="0 0 24 24" aria-hidden="true" className="h-[22px] w-[22px] fill-none stroke-current stroke-[1.6]"><circle cx="12" cy="8" r="3.6"/><path strokeLinecap="round" strokeLinejoin="round" d="M5 21v-2a7 7 0 0 1 14 0v2"/></svg>
+            </button>
+            <button type="button" onClick={() => window.dispatchEvent(new Event(ABRIR_PEDIDO_EVENT))} aria-label={`Mi pedido${cantidadCarrito ? `, ${cantidadCarrito} productos` : ''}`} className="mm-mobile-icon-button relative">
+              <svg viewBox="0 0 24 24" aria-hidden="true" className="h-[23px] w-[23px] fill-none stroke-current stroke-[1.6]"><path strokeLinecap="round" strokeLinejoin="round" d="M3 4h2l2.1 11.2a2 2 0 0 0 2 1.6h8.7a2 2 0 0 0 1.9-1.4L22 8H6"/><circle cx="10" cy="20" r="1.2"/><circle cx="18" cy="20" r="1.2"/></svg>
+              {cantidadCarrito > 0 && <span className="mm-mobile-cart-count">{cantidadCarrito > 9 ? '9+' : cantidadCarrito}</span>}
+            </button>
+          </div>
+        </div>
+        <div className="mm-mobile-search-row">
+          <HeaderSearch mobileInline />
+          <button type="button" aria-label="Ir a categorías y filtros" onClick={() => document.getElementById('restaurant-categories')?.scrollIntoView({ behavior: 'smooth', block: 'center' })} className="mm-mobile-filter-button">
+            <svg viewBox="0 0 24 24" aria-hidden="true" className="h-[21px] w-[21px] fill-none stroke-current stroke-[1.65]"><path strokeLinecap="round" d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></svg>
+          </button>
+        </div>
+        {menuMovilAbierto && <nav aria-label="Menú principal" className="mm-mobile-menu">
+          <Link href="/" onClick={() => setMenuMovilAbierto(false)}>Inicio</Link>
+          {user ? <>
+            <Link href="/mis-pedidos" onClick={() => setMenuMovilAbierto(false)}>Mis pedidos</Link>
+            <Link href="/favoritos" onClick={() => setMenuMovilAbierto(false)}>Mis favoritos</Link>
+            <Link href="/perfil" onClick={() => setMenuMovilAbierto(false)}>Mi perfil</Link>
+          </> : <Link href="/login" onClick={() => setMenuMovilAbierto(false)}>Iniciar sesión</Link>}
+          <button type="button" onClick={() => { setMenuMovilAbierto(false); setIniciarMapaEnDirecciones(Boolean(user)); setMapaAbierto(true) }}>🗺️ Mapa y direcciones</button>
+        </nav>}
+      </header>
+
+      <header className="relative z-40 mx-auto mt-2 hidden w-[calc(100%-24px)] max-w-6xl rounded-full border border-white/15 bg-black/55 px-3 py-2 shadow-xl shadow-black/25 backdrop-blur-xl md:block md:px-5">
         <div className="flex min-h-11 items-center gap-2 md:gap-4">
           <Link href="/" aria-label="MotoMoto, inicio" className="flex shrink-0 items-center gap-1.5">
             <Image src="/logo-motomoto.png" alt="MotoMoto" width={40} height={48} priority className="h-11 w-9 object-contain" />
