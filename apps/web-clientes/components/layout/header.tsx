@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import HeaderSearch from './header-search'
 import UserMenu from './user-menu'
@@ -56,9 +56,9 @@ interface HeaderProps {
 
 export default function Header({ user, direccionDeBD }: HeaderProps) {
   const router = useRouter()
+  const pathname = usePathname()
   const [mapaAbierto, setMapaAbierto] = useState(false)
   const [iniciarMapaEnDirecciones, setIniciarMapaEnDirecciones] = useState(false)
-  const [menuMovilAbierto, setMenuMovilAbierto] = useState(false)
   const [redes, setRedes] = useState<RedesSociales>({})
   const direccionActual = useDireccionActual(direccionDeBD ?? null)
   const [cantidadCarrito, setCantidadCarrito] = useState(0)
@@ -120,22 +120,11 @@ export default function Header({ user, direccionDeBD }: HeaderProps) {
     <>
       <header className="mm-mobile-header relative z-40 md:hidden">
         <div className="mm-mobile-topbar">
-          <button type="button" onClick={() => setMenuMovilAbierto((open) => !open)} aria-label={menuMovilAbierto ? 'Cerrar menú' : 'Abrir menú'} aria-expanded={menuMovilAbierto} className="mm-mobile-icon-button">
-            <svg viewBox="0 0 24 24" aria-hidden="true" className="h-6 w-6 fill-none stroke-current stroke-[1.8]"><path strokeLinecap="round" d={menuMovilAbierto ? 'm6 6 12 12M18 6 6 18' : 'M4 7h16M4 12h16M4 17h16'} /></svg>
-          </button>
           <Link href="/" aria-label="MotoMoto, inicio" className="mm-mobile-brand">
-            <Image src="/logo-motomoto.png" alt="" width={30} height={36} priority className="h-8 w-7 object-contain" />
+            <img src="/logo_blanco.png" alt="" width={30} height={36} className="h-8 w-7 object-contain" />
             <span>Moto<span>Moto</span></span>
           </Link>
-          <div className="mm-mobile-actions">
-            <button type="button" onClick={() => router.push(user ? '/perfil' : '/login')} aria-label={user ? `Mi perfil, ${user.nombre}` : 'Iniciar sesión'} className="mm-mobile-icon-button">
-              <svg viewBox="0 0 24 24" aria-hidden="true" className="h-[22px] w-[22px] fill-none stroke-current stroke-[1.6]"><circle cx="12" cy="8" r="3.6"/><path strokeLinecap="round" strokeLinejoin="round" d="M5 21v-2a7 7 0 0 1 14 0v2"/></svg>
-            </button>
-            <button type="button" onClick={() => window.dispatchEvent(new Event(ABRIR_PEDIDO_EVENT))} aria-label={`Mi pedido${cantidadCarrito ? `, ${cantidadCarrito} productos` : ''}`} className="mm-mobile-icon-button relative">
-              <svg viewBox="0 0 24 24" aria-hidden="true" className="h-[23px] w-[23px] fill-none stroke-current stroke-[1.6]"><path strokeLinecap="round" strokeLinejoin="round" d="M3 4h2l2.1 11.2a2 2 0 0 0 2 1.6h8.7a2 2 0 0 0 1.9-1.4L22 8H6"/><circle cx="10" cy="20" r="1.2"/><circle cx="18" cy="20" r="1.2"/></svg>
-              {cantidadCarrito > 0 && <span className="mm-mobile-cart-count">{cantidadCarrito > 9 ? '9+' : cantidadCarrito}</span>}
-            </button>
-          </div>
+          {user && <span className="mm-mobile-greeting">Hola, {user.nombre.trim().split(/\s+/)[0]}</span>}
         </div>
         <div className="mm-mobile-search-row">
           <HeaderSearch mobileInline />
@@ -143,15 +132,6 @@ export default function Header({ user, direccionDeBD }: HeaderProps) {
             <svg viewBox="0 0 24 24" aria-hidden="true" className="h-[21px] w-[21px] fill-none stroke-current stroke-[1.65]"><path strokeLinecap="round" d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></svg>
           </button>
         </div>
-        {menuMovilAbierto && <nav aria-label="Menú principal" className="mm-mobile-menu">
-          <Link href="/" onClick={() => setMenuMovilAbierto(false)}>Inicio</Link>
-          {user ? <>
-            <Link href="/mis-pedidos" onClick={() => setMenuMovilAbierto(false)}>Mis pedidos</Link>
-            <Link href="/favoritos" onClick={() => setMenuMovilAbierto(false)}>Mis favoritos</Link>
-            <Link href="/perfil" onClick={() => setMenuMovilAbierto(false)}>Mi perfil</Link>
-          </> : <Link href="/login" onClick={() => setMenuMovilAbierto(false)}>Iniciar sesión</Link>}
-          <button type="button" onClick={() => { setMenuMovilAbierto(false); setIniciarMapaEnDirecciones(Boolean(user)); setMapaAbierto(true) }}>🗺️ Mapa y direcciones</button>
-        </nav>}
       </header>
 
       <header className="relative z-40 mx-auto mt-2 hidden w-[calc(100%-24px)] max-w-6xl rounded-full border border-white/15 bg-black/55 px-3 py-2 shadow-xl shadow-black/25 backdrop-blur-xl md:block md:px-5">
@@ -174,6 +154,24 @@ export default function Header({ user, direccionDeBD }: HeaderProps) {
           {user ? <UserMenu nombre={user.nombre} celular={user.celular} /> : <Link href="/login" className="motomoto-login-cta motomoto-display flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full bg-[#ff7628] px-3.5 py-2.5 text-[11px] font-black italic text-white md:px-5 md:text-xs"><span className="motomoto-login-persona" aria-hidden="true">👤</span>Login</Link>}
         </div>
       </header>
+
+      <nav aria-label="Navegación móvil" className="mm-mobile-bottom-nav md:hidden">
+        <Link href="/" aria-current={pathname === '/' ? 'page' : undefined} className={pathname === '/' ? 'is-active' : ''}>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z" /></svg><span>Inicio</span>
+        </Link>
+        <Link href="/favoritos" aria-current={pathname.startsWith('/favoritos') ? 'page' : undefined} className={pathname.startsWith('/favoritos') ? 'is-active' : ''}>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 8.8c0 5.1-8.8 11-8.8 11s-8.8-5.9-8.8-11A4.8 4.8 0 0 1 12 6.2a4.8 4.8 0 0 1 8.8 2.6Z" /></svg><span>Favoritos</span>
+        </Link>
+        <button type="button" className="mm-mobile-bottom-order" aria-label="Abrir mi pedido" onClick={() => pathname === '/' ? window.dispatchEvent(new Event(ABRIR_PEDIDO_EVENT)) : router.push('/carrito')}>
+          <span className="mm-mobile-bottom-order-disc"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8h12l1 13H5zM9 8V6a3 3 0 0 1 6 0v2" /></svg>{cantidadCarrito > 0 && <i>{cantidadCarrito > 9 ? '9+' : cantidadCarrito}</i>}<small>Pedido</small></span>
+        </button>
+        <button type="button" onClick={() => { setIniciarMapaEnDirecciones(Boolean(user)); setMapaAbierto(true) }}>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12Z" /><circle cx="12" cy="9" r="2.2" /></svg><span>Direcciones</span>
+        </button>
+        <Link href="/mis-pedidos" aria-current={pathname.startsWith('/mis-pedidos') ? 'page' : undefined} className={pathname.startsWith('/mis-pedidos') ? 'is-active' : ''}>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v15H4zM8 3v4m8-4v4M4 9h16" /><path d="M8 13h3m-3 4h8" /></svg><span>Mis pedidos</span>
+        </Link>
+      </nav>
 
       <MapaLocalesModal open={mapaAbierto} onClose={() => setMapaAbierto(false)} onConfirmarUbicacion={confirmarUbicacionMapa} direccionActual={direccionActual} mostrarDirecciones={Boolean(user)} vistaInicial={iniciarMapaEnDirecciones ? 'direcciones' : 'locales'} onDireccionSeleccionada={() => router.refresh()} />
     </>

@@ -173,7 +173,7 @@ export default function HeaderSearch({ mobileInline = false }: { mobileInline?: 
       </form>
 
       {mobileInline ? (
-        <button type="button" onClick={openMobileSearch} aria-label="Buscar restaurantes y platos" className="flex h-11 min-w-0 flex-1 items-center gap-2.5 rounded-full border border-white/20 bg-[#111] px-3.5 text-left text-sm text-white/65 transition hover:border-white/35">
+        <button type="button" onClick={openMobileSearch} aria-label="Buscar restaurantes y platos" className="flex h-11 min-w-0 flex-1 items-center gap-2.5 rounded-full border border-white/55 bg-[#1264cc] px-3.5 text-left text-sm text-white/85 transition hover:border-white/80">
           <svg viewBox="0 0 24 24" aria-hidden="true" className="h-[18px] w-[18px] shrink-0 fill-none stroke-current stroke-[1.8]"><circle cx="10.8" cy="10.8" r="6.8"/><path strokeLinecap="round" d="m16 16 5 5"/></svg>
           <span className="truncate">Buscar sushi, platos o restaurantes…</span>
         </button>

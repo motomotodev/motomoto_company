@@ -3,7 +3,6 @@ import { notFound } from 'next/navigation'
 import { sql } from '@/lib/db'
 import { getSessionUser } from '@/lib/auth'
 import Header from '@/components/layout/header'
-import BottomNav from '@/components/layout/bottom-nav'
 import HeaderRestaurante from '@/components/restaurante/header-restaurante'
 import SubcategoriasTabs from '@/components/restaurante/subcategorias-tabs'
 import RestauranteMenu from '@/components/restaurante/restaurante-menu'
@@ -155,7 +154,7 @@ export default async function RestaurantePage({
     <>
       <Header user={user} />
 
-      <main className="pb-24 md:pb-8">
+      <main className="mm-restaurant-page pb-24 md:pb-8">
         <HeaderRestaurante
           id={restaurante.id}
           nombre={restaurante.nombre}
@@ -187,7 +186,6 @@ export default async function RestaurantePage({
         </div>
       </main>
 
-      <BottomNav />
     </>
   )
 }

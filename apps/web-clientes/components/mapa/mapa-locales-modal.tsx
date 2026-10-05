@@ -452,8 +452,8 @@ export default function MapaLocalesModal({ open, onClose, onConfirmarUbicacion, 
   ))
 
   return (
-    <div className="fixed inset-0 z-[70] grid place-items-center bg-black/65 p-0 backdrop-blur-md md:p-5" onMouseDown={(e) => e.target === e.currentTarget && onClose()}>
-      <section role="dialog" aria-modal="true" aria-label="Locales en el mapa" className="flex h-[100dvh] w-full flex-col overflow-hidden border border-white/15 bg-[#08090b]/90 shadow-2xl backdrop-blur-2xl md:h-[min(94dvh,900px)] md:max-w-6xl md:rounded-[28px]">
+    <div className="fixed inset-0 z-[110] grid place-items-center bg-[#061d45]/80 p-0 backdrop-blur-md md:p-5" onMouseDown={(e) => e.target === e.currentTarget && onClose()}>
+      <section role="dialog" aria-modal="true" aria-label="Locales en el mapa" className="mm-map-dialog flex h-[100dvh] w-full flex-col overflow-hidden border border-blue-200/25 bg-[#0b3473]/95 shadow-2xl backdrop-blur-2xl md:h-[min(94dvh,900px)] md:max-w-6xl md:rounded-[28px]">
         <header className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-2 px-4 pb-2 pt-[max(14px,env(safe-area-inset-top))] md:grid-cols-[minmax(0,1fr)_auto_auto] md:px-6 md:pt-5">
           <div className="min-w-0"><h2 className="motomoto-display text-lg font-black uppercase tracking-wide text-white md:text-xl">Locales en el mapa</h2><p className="text-[11px] text-white/60 md:text-xs">{vista === 'direcciones' && !capturandoDireccion ? 'Elige una dirección guardada o administra tus ubicaciones' : 'Toca el mapa para marcar dónde entregamos'}</p></div>
           {mostrarDirecciones && <nav aria-label="Sección del mapa" className="col-span-2 row-start-2 flex gap-2 overflow-x-auto [scrollbar-width:none] md:col-span-1 md:col-start-2 md:row-start-1 md:mr-2 md:justify-self-center">

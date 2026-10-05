@@ -8,7 +8,6 @@ import { Suspense } from 'react'
 import { sql } from '@/lib/db'
 import { getSessionUser } from '@/lib/auth'
 import Header from '@/components/layout/header'
-import BottomNav from '@/components/layout/bottom-nav'
 import BuscarCliente from '@/components/buscar/buscar-cliente'
 
 export const dynamic = 'force-dynamic'
@@ -43,7 +42,6 @@ export default async function BuscarPage() {
         </Suspense>
       </main>
 
-      <BottomNav />
     </>
   )
 }

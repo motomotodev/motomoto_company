@@ -167,6 +167,7 @@ export default function PedidoModal({ open, onClose, estaLogueado, direccionDeBD
 
   return (
     <div className="mm-order-backdrop" onMouseDown={(event) => event.target === event.currentTarget && !enviando && onClose()}>
+      <button type="button" className="mm-order-close-overlay" onClick={onClose} aria-label="Cerrar boleta" disabled={enviando}>×</button>
       <section className="mm-order-layout" role="dialog" aria-modal="true" aria-labelledby="mm-order-title">
         <div className="mm-order-machine">
           <div className="mm-order-slot"><i /><button type="button" onClick={onClose} aria-label="Cerrar pedido" disabled={enviando}>×</button></div>

@@ -90,7 +90,7 @@ export default function RestaurantMenuOverlay({
       <header className="mm-home-menu-header flex shrink-0 items-center gap-3 pb-3">
         <button type="button" onClick={onClose} className="mm-home-menu-back shrink-0" aria-label="Volver al plato destacado"><span aria-hidden="true">‹</span><span>Volver</span></button>
         <div className="mm-home-menu-logo grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded-full border border-white/35 bg-white/10 text-2xl shadow-lg">
-          {restaurante.logo_url ? <img src={restaurante.logo_url} alt="" className="h-full w-full object-contain" /> : <span>{restaurante.categorias[0]?.emoji || '🍽️'}</span>}
+          {restaurante.logo_url ? <img src={restaurante.logo_url} alt="" loading="lazy" decoding="async" className="h-full w-full object-contain" /> : <span>{restaurante.categorias[0]?.emoji || '🍽️'}</span>}
         </div>
         <div className="mm-home-menu-title min-w-0 flex-1">
           <span className="mm-home-menu-tag">{restaurante.subtitulo || restaurante.categorias[0]?.nombre || 'Carta completa'}</span>
@@ -113,7 +113,7 @@ export default function RestaurantMenuOverlay({
               const itemKey = clave('plato', item.id)
               return <article key={item.id} className="mm-home-menu-product" style={{ '--card-index': index } as CSSProperties & { '--card-index': number }}>
                 <span className="mm-home-menu-product-image">
-                  {item.imagen_url ? <img src={item.imagen_url} alt="" /> : <span>{restaurante.categorias[0]?.emoji || '🍽️'}</span>}
+                  {item.imagen_url ? <img src={item.imagen_url} alt="" loading={Math.abs(index - slide) <= 2 ? 'eager' : 'lazy'} decoding="async" /> : <span>{restaurante.categorias[0]?.emoji || '🍽️'}</span>}
                 </span>
                 <span className="mm-home-menu-time">◷ {item.tiempo_estimado ? `${item.tiempo_estimado} min` : restaurante.tiempo_estimado || '—'}</span>
                 <h3>{item.nombre}</h3>

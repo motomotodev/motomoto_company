@@ -24,8 +24,8 @@ function lanzarParticulasFavorito(origen?: HTMLElement) {
     particle.textContent = i % 3 === 0 ? '♥' : '✦'
     Object.assign(particle.style, {
       position: 'fixed', left: `${startX}px`, top: `${startY}px`, zIndex: '9999',
-      color: i % 3 === 0 ? '#ff244f' : '#ff526f', fontSize: `${12 + Math.random() * 9}px`,
-      lineHeight: '1', pointerEvents: 'none', textShadow: '0 0 12px rgba(255,36,79,.9)',
+      color: i % 3 === 0 ? '#1877f2' : '#6aa8ff', fontSize: `${12 + Math.random() * 9}px`,
+      lineHeight: '1', pointerEvents: 'none', textShadow: '0 0 12px rgba(24,119,242,.9)',
     })
     document.body.appendChild(particle)
     const driftX = (Math.random() - 0.5) * 100
@@ -133,7 +133,7 @@ export function usePreferenciasCliente() {
 }
 
 export function FavoritoButton({ active, pending, onClick, compact = false }: { active: boolean; pending?: boolean; onClick: (source: HTMLElement) => void; compact?: boolean }) {
-  return <button type="button" aria-pressed={active} aria-label={active ? 'Quitar de favoritos' : 'Agregar a favoritos'} title={active ? 'Quitar de favoritos' : 'Agregar a favoritos'} disabled={pending} onClick={(event) => onClick(event.currentTarget)} className={`mm-favorite-button grid shrink-0 place-items-center rounded-full border transition hover:scale-110 disabled:opacity-50 ${compact ? 'h-9 w-9 text-lg' : 'h-10 w-10 text-xl'} ${active ? 'is-active border-red-300 bg-red-500/30 text-[#ff244f] shadow-[0_0_18px_rgba(255,36,79,.42)]' : 'border-white/20 bg-black/50 text-white/85 hover:border-red-300 hover:bg-red-500/15 hover:text-[#ff526f]'}`}>
+  return <button type="button" aria-pressed={active} aria-label={active ? 'Quitar de favoritos' : 'Agregar a favoritos'} title={active ? 'Quitar de favoritos' : 'Agregar a favoritos'} disabled={pending} onClick={(event) => onClick(event.currentTarget)} className={`mm-favorite-button grid shrink-0 place-items-center rounded-full border transition hover:scale-110 disabled:opacity-50 ${compact ? 'h-9 w-9 text-lg' : 'h-10 w-10 text-xl'} ${active ? 'is-active border-blue-300 bg-blue-500/30 text-[#1877f2] shadow-[0_0_18px_rgba(24,119,242,.42)]' : 'border-white/20 bg-black/50 text-white/85 hover:border-blue-300 hover:bg-blue-500/15 hover:text-[#6aa8ff]'}`}>
     {active ? '♥' : '♡'}
   </button>
 }

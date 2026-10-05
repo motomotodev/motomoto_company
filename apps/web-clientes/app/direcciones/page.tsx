@@ -8,7 +8,6 @@ import Link from 'next/link'
 import { sql } from '@/lib/db'
 import { getSessionUser } from '@/lib/auth'
 import Header from '@/components/layout/header'
-import BottomNav from '@/components/layout/bottom-nav'
 import DireccionesEditor from '@/components/direcciones/direcciones-editor'
 
 export const dynamic = 'force-dynamic'
@@ -54,7 +53,6 @@ export default async function DireccionesPage() {
         <DireccionesEditor initialData={direcciones} estaLogueado={!!user} />
       </main>
 
-      <BottomNav />
     </>
   )
 }

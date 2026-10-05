@@ -7,7 +7,6 @@ export const metadata: Metadata = {
 import { sql } from '@/lib/db'
 import { getSessionUser } from '@/lib/auth'
 import Header from '@/components/layout/header'
-import BottomNav from '@/components/layout/bottom-nav'
 import CarritoCliente from '@/components/carrito/carrito-cliente'
 
 export const dynamic = 'force-dynamic'
@@ -62,7 +61,6 @@ export default async function CarritoPage() {
         />
       </main>
 
-      <BottomNav />
     </>
   )
 }

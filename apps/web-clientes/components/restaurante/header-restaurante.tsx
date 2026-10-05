@@ -44,12 +44,12 @@ export default function HeaderRestaurante({
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-brand/30 to-brand/5" />
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-surface-dark via-black/30 to-black/40" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0b3473] via-[#061c3b]/50 to-[#061c3b]/45" />
 
         {/* Botón atrás */}
         <Link
           href="/"
-          className="absolute top-4 left-4 w-10 h-10 rounded-full bg-black/60 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-black/80 transition-colors"
+          className="absolute top-4 left-4 w-10 h-10 rounded-full bg-[#0b3473]/85 backdrop-blur-md border border-white/40 flex items-center justify-center text-white hover:bg-[#1877f2] transition-colors"
           aria-label="Volver"
         >
           ←

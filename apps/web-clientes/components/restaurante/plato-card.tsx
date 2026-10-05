@@ -71,87 +71,71 @@ export default function PlatoCard({ plato, restaurante, onAbrirOpciones, esFavor
   }
 
   return (
-    <div
-      className={`bg-surface border border-line rounded-2xl overflow-hidden transition-colors ${
-        plato.disponible ? 'hover:border-brand/40' : 'opacity-60'
-      }`}
-    >
-      <div className="flex">
-        {/* IMAGEN */}
-        <div className="relative w-24 h-24 md:w-32 md:h-32 flex-shrink-0">
+    <article className={`mm-dish-card overflow-hidden rounded-[22px] border bg-surface shadow-lg transition duration-200 ${plato.disponible ? 'hover:-translate-y-1 hover:border-blue-300/70' : 'opacity-65'}`}>
+        <div className="mm-dish-photo relative aspect-[1.75/1] overflow-hidden bg-[#082b62]">
           {plato.imagen_url ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
               src={plato.imagen_url}
               alt={plato.nombre}
-              className="w-full h-full object-cover"
+              className="h-full w-full object-cover"
+              loading="lazy"
+              decoding="async"
             />
           ) : (
-            <div className="w-full h-full bg-gradient-to-br from-brand/20 to-transparent flex items-center justify-center text-3xl">
+            <div className="grid h-full w-full place-items-center bg-gradient-to-br from-blue-500/25 to-[#082b62] text-5xl">
               🍽️
             </div>
           )}
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#061d45]/95 to-transparent" />
+          {plato.tiempo_estimado && <span className="absolute bottom-2 left-2 rounded-full border border-white/25 bg-[#061d45]/75 px-2.5 py-1 text-[10px] font-bold text-white backdrop-blur">◷ {plato.tiempo_estimado} min</span>}
+          <div className="absolute right-2 top-2"><FavoritoButton compact active={esFavorito} pending={pendiente} onClick={onAlternarFavorito} /></div>
           {!plato.disponible && (
             <div className="absolute inset-0 bg-black/70 flex items-center justify-center">
-              <span className="text-[10px] font-bold text-gray-400 bg-gray-900 px-2 py-1 rounded-full">
+              <span className="rounded-full border border-white/25 bg-[#061d45]/90 px-3 py-1.5 text-xs font-bold text-white">
                 No disponible
               </span>
             </div>
           )}
         </div>
 
-        {/* INFO */}
-        <div className="flex-1 p-3 flex flex-col min-w-0">
-          <div className="mb-1 flex items-start justify-between gap-2">
-            <h3 className="line-clamp-2 text-sm font-bold leading-tight text-white">{plato.nombre}</h3>
-            <FavoritoButton compact active={esFavorito} pending={pendiente} onClick={onAlternarFavorito} />
-          </div>
-
+        <div className="flex min-h-[178px] flex-col p-3.5 text-white">
+          <h3 className="line-clamp-2 text-base font-black leading-tight">{plato.nombre}</h3>
           {plato.descripcion && (
-            <p className="text-[11px] text-gray-500 line-clamp-2 mb-2">
+            <p className="mt-1.5 line-clamp-2 text-xs leading-relaxed text-blue-100/65">
               {plato.descripcion}
             </p>
           )}
-
-          <CalificacionEstrellas compact rating={calificacion} pending={pendiente} onRate={onCalificar} />
-
-          <div className="flex flex-wrap items-center gap-1.5 mt-auto mb-2">
-            {plato.tiempo_estimado && (
-              <span className="text-[10px] text-gray-500">
-                ⏱ {plato.tiempo_estimado} min
-              </span>
-            )}
-            {plato.tiene_opciones && (
-              <span className="text-[10px] bg-brand/10 text-brand px-1.5 py-0.5 rounded font-bold">
-                ⚙️ Configurable
-              </span>
-            )}
+          <div className="mt-auto flex items-center justify-between gap-2 pt-2">
+            <div className="min-w-0">
+              <span className="block text-[10px] font-semibold text-blue-100/55">Precio</span>
+              <span className="text-lg font-black text-white">S/ {Number(plato.precio).toFixed(2)}</span>
+            </div>
+            <div className="flex max-w-[55%] flex-col items-end gap-1">
+              <CalificacionEstrellas compact rating={calificacion} pending={pendiente} onRate={onCalificar} />
+              {plato.tiene_opciones && <span className="truncate text-[9px] font-semibold text-blue-100/65">Personalizable</span>}
+            </div>
           </div>
 
-          {/* PRECIO + BOTÓN */}
-          <div className="flex items-center justify-between gap-2">
-            <span className="font-black text-brand text-base md:text-lg">
-              S/ {Number(plato.precio).toFixed(2)}
-            </span>
-
-            {plato.disponible && (
+          <div className="mt-2.5">
+            {plato.disponible ? (
               <button
                 type="button"
                 onClick={handleAgregar}
-                className="relative bg-brand hover:bg-brand-dark text-black font-bold text-sm w-9 h-9 rounded-full flex items-center justify-center transition-all active:scale-90 flex-shrink-0"
+                className="relative flex min-h-10 w-full items-center justify-between rounded-full bg-[#1877f2] px-4 text-sm font-black text-white shadow-md shadow-blue-950/30 transition hover:-translate-y-0.5 hover:bg-[#0b65dc] active:scale-[.98]"
                 aria-label={`Agregar ${plato.nombre}`}
               >
-                +
+                <span>{plato.tiene_opciones ? 'Elegir opciones' : 'Agregar al pedido'}</span>
+                <span aria-hidden="true" className="grid h-7 w-7 place-items-center rounded-full bg-white text-lg text-[#0b3473]">+</span>
                 {enCarrito > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-black text-brand text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-surface">
+                  <span className="absolute -right-1 -top-1 grid h-5 min-w-5 place-items-center rounded-full border-2 border-[#1555a2] bg-white px-1 text-[10px] font-bold text-[#0b3473]">
                     {enCarrito}
                   </span>
                 )}
               </button>
-            )}
+            ) : <div className="grid min-h-10 place-items-center rounded-full bg-white/10 text-xs font-bold text-white/60">Agotado</div>}
           </div>
         </div>
-      </div>
-    </div>
+    </article>
   )
 }

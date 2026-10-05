@@ -3,7 +3,6 @@ import { notFound } from 'next/navigation'
 import { sql } from '@/lib/db'
 import { getSessionUser } from '@/lib/auth'
 import Header from '@/components/layout/header'
-import BottomNav from '@/components/layout/bottom-nav'
 import EstadoTimeline from '@/components/pedidos/estado-timeline'
 import { formatearFechaHora } from '@/lib/utils/fechas'
 import ConfirmarEntrega from '@/components/pedidos/confirmar-entrega'
@@ -311,7 +310,6 @@ export default async function PedidoPage({
         </Link>
       </main>
 
-      <BottomNav />
     </>
   )
 }

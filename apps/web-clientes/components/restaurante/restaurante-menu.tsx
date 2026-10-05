@@ -80,7 +80,7 @@ export default function RestauranteMenu({
               </span>
             </h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
               {grupo.platos.map((plato) => (
                 <PlatoCard
                   key={plato.id}
